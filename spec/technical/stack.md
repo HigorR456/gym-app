@@ -21,6 +21,8 @@
 - The app must work fully offline for its core functionality.
 - Do not depend on an external API for basic app functionality.
 
-## Open item
+## Icon library decision
 
-`@react-native-vector-icons` is the bare React Native package. In an Expo-managed project, `@expo/vector-icons` (bundled with Expo, no native linking required) is the more idiomatic equivalent and wraps most of the same icon families. This was flagged during spec review — confirm this choice is intentional before implementation.
+`react-native-vector-icons` is used instead of `@expo/vector-icons`, despite the latter being more idiomatic in an Expo-managed project (bundled, no native linking required). This is intentional: `@expo/vector-icons` is expected to be deprecated soon, so `react-native-vector-icons` was chosen for longer-term support.
+
+Known trade-off: `react-native-vector-icons` itself now warns on install that it's moving to a per-icon-family package model (see its migration guide). Revisit this choice if that migration becomes disruptive before the app reaches Tab Navigation ([navigation.md](../features/navigation.md)), where icons are first used.

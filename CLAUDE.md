@@ -1,5 +1,7 @@
 # Gym App — Project Guide
 
+@AGENTS.md
+
 This is a mobile gym workout tracker built with **React Native + Expo**, following a **local-first / offline-first** architecture. There is no backend for the MVP — SQLite is the single source of truth.
 
 This project follows **spec-driven development**: all product and technical decisions live in `spec/`, organized by topic. Read the relevant spec file(s) before implementing or changing behavior in that area. If you find a bug, gap, or contradiction in the spec while implementing, resolve it in the spec first, then write the code to match.
