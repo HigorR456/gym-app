@@ -69,9 +69,18 @@ A recommended starting structure:
 
 ```text
 src/
-├── app/
-│   ├── navigation/
-│   └── providers/
+├── app/                  # Expo Router route files only — see note below
+│   ├── _layout.tsx
+│   └── (tabs)/
+│       ├── _layout.tsx
+│       ├── index.tsx
+│       ├── program.tsx
+│       ├── start.tsx
+│       ├── schedule.tsx
+│       └── settings.tsx
+│
+├── providers/
+│   └── AppProviders.tsx
 │
 ├── features/
 │   ├── workouts/
@@ -124,6 +133,10 @@ src/
 ```
 
 Adjust this structure if a better organization emerges for the actual codebase, but preserve the architectural principles.
+
+**Note on `app/`**: because Expo Router is file-based (every file under `app/` becomes a route), `app/` must contain route files only — layouts and screens. That's why `providers/` lives as a sibling of `app/`, not nested inside it as originally sketched: a `providers/` folder inside `app/` would itself be picked up as routable. Non-route helpers always live outside `app/`.
+
+Import from `src/` using the `@/` path alias (e.g. `@/lib/theme`, `@/providers/AppProviders`) instead of relative `../../..` chains — configured once in `tsconfig.json`.
 
 ## Repository pattern
 

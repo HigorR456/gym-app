@@ -23,9 +23,11 @@
 
 ## Icon library decision
 
-`react-native-vector-icons` is used instead of `@expo/vector-icons`, despite the latter being more idiomatic in an Expo-managed project (bundled, no native linking required). This is intentional: `@expo/vector-icons` is expected to be deprecated soon, so `react-native-vector-icons` was chosen for longer-term support.
+`@react-native-vector-icons` (the scoped, per-icon-family package line — e.g. `@react-native-vector-icons/fontawesome6`) is used instead of `@expo/vector-icons`. This is intentional: `@expo/vector-icons` is expected to be deprecated soon, and `@react-native-vector-icons` is the maintainer-endorsed successor going forward, with direct `expo-font` integration (loads via an Expo config plugin — no manual `useFonts` call, no native prebuild needed for Expo Go).
 
-Known trade-off: `react-native-vector-icons` itself now warns on install that it's moving to a per-icon-family package model (see its migration guide). Revisit this choice if that migration becomes disruptive before the app reaches Tab Navigation ([navigation.md](../features/navigation.md)), where icons are first used.
+Note the exact package name: the unscoped `react-native-vector-icons` (no `@` scope) is the legacy package being migrated *away from* — it is not what "`@react-native-vector-icons`" in this spec refers to.
+
+Currently installed: `@react-native-vector-icons/fontawesome6` (used for all Tab Navigation icons, see [navigation.md](../features/navigation.md)). Add other per-family packages only when a needed icon genuinely isn't in FontAwesome6.
 
 ## Theme tokens
 
