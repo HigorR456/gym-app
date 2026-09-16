@@ -20,15 +20,26 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 //   spec/technical/database-schema.md, "Session history").
 export async function up(db: SQLiteDatabase): Promise<void> {
   await db.execAsync(`
+    -- Column set matches the real RepDB exercises.json schema (verified in
+    -- spec/technical/dataset-and-licensing.md's now-resolved "Open item"),
+    -- keeping only the fields the app actually needs as real columns.
+    -- Everything else (primary/secondary muscles, category, instructions,
+    -- tips, goals, tags, met, ...) lives in \`metadata\` as JSON — promote a
+    -- field to a real column only once a feature needs to query on it (e.g.
+    -- the catalog picker's muscle-group filter, spec/features/workout.md).
     CREATE TABLE exercises (
       id TEXT PRIMARY KEY NOT NULL,
       name_en TEXT NOT NULL,
       name_es TEXT NOT NULL,
       name_de TEXT NOT NULL,
-      description TEXT,
-      muscle_group TEXT,
+      description_en TEXT,
+      description_es TEXT,
+      description_de TEXT,
+      body_part TEXT,
       equipment TEXT,
-      image_path TEXT,
+      difficulty TEXT,
+      is_bodyweight INTEGER NOT NULL DEFAULT 0,
+      images TEXT,
       metadata TEXT
     );
 

@@ -4,8 +4,8 @@ import { Component, Suspense } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { bootstrapDatabase } from '@/data/sqlite/bootstrapDatabase';
 import { DATABASE_NAME } from '@/data/sqlite/database';
-import { migrateDbIfNeeded } from '@/data/sqlite/migrations';
 
 function LoadingFallback() {
   return (
@@ -56,7 +56,7 @@ export function AppProviders({ children }: PropsWithChildren) {
     <SafeAreaProvider>
       <DatabaseErrorBoundary>
         <Suspense fallback={<LoadingFallback />}>
-          <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrateDbIfNeeded} useSuspense>
+          <SQLiteProvider databaseName={DATABASE_NAME} onInit={bootstrapDatabase} useSuspense>
             {children}
           </SQLiteProvider>
         </Suspense>
