@@ -24,7 +24,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "@react-native-vector-icons/fontawesome6"
+      "@react-native-vector-icons/fontawesome6",
+      "expo-sqlite"
     ]
   }
 }

@@ -56,6 +56,13 @@ Record at least:
 
 Past (ended/deleted) schedules follow the same principle — no dedicated browsing screen in v1, but data must be persisted correctly (see [Schedule](../features/schedule.md)).
 
+## Implementation notes
+
+- Schema lives in `src/data/sqlite/migrations/`, one file per version (`0001_initial_schema.ts`, ...), run through a small `PRAGMA user_version`-based runner (`src/data/sqlite/migrations/index.ts`) on app start via `SQLiteProvider`'s `onInit` (see [Architecture](architecture.md), "App bootstrap"). Migrations are append-only — never edit one that already shipped.
+- All timestamps (`created_at`, `updated_at`, `started_at`, `ended_at`, schedule `start_date`/`end_date`) are stored as ISO 8601 `TEXT`, not SQLite's numeric datetime — sortable, unambiguous, portable to a future backend.
+- Column names are `snake_case`; the `id`/`createdAt`/`updatedAt` naming from [Architecture](architecture.md) is the domain-layer (TypeScript) convention — the SQLite repository layer is responsible for mapping between the two, not the domain.
+- Foreign key policy (enforced via `PRAGMA foreign_keys = ON`): child rows that only exist as part of their parent (e.g. `workout_exercises`/`workout_sets` under a `workout`) use `ON DELETE CASCADE`. Cross-entity references that the spec requires explicit app-level handling for before the referenced row can go — deleting a `Workout` referenced by `program_days` (see [Workout](../features/workout.md)), deleting a `Program` with an active schedule (see [Program](../features/program.md)) — use no action, so a raw delete that skips the required app logic fails loudly instead of silently corrupting state. `workout_sessions`' links back to the workout/program/schedule it came from use `ON DELETE SET NULL`, since history must outlive them.
+
 ## Critical failure handling
 
 - **Migration failure**: if a migration fails during an app update, the app must not become permanently inaccessible — there must be a fallback/recovery mechanism (e.g. reverting to the previous schema version, or an error screen with an option to reset local data).
