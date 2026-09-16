@@ -30,8 +30,9 @@ Editing weight, reps, rest, or adding/removing sets and exercises **during execu
 
 ## Minimum required fields (beyond the table name)
 
+- All user-created tables (`workouts`, `programs`, `scheduled_programs`, `workout_sessions`, and their child tables): client-generated `id` (UUID/ULID, not a local auto-increment), plus `createdAt`/`updatedAt` timestamps — required by [Architecture](architecture.md)'s sync-readiness principle, even though there's no backend yet.
 - `workout_sessions`: needs a status field (e.g. `in_progress` / `completed` / `discarded`) and start/end timestamps, to support session recovery and discarding (see [Workout Execution](../features/workout-execution.md)) and the robust timer (see [Business Rules](business-rules.md)).
-- `scheduled_programs`: needs a status field (e.g. `active` / `archived`), the current cycle position, the starting day chosen at creation, and a nullable end date (for continuous/infinite programs — see [Schedule](../features/schedule.md)).
+- `scheduled_programs`: needs a status field (e.g. `active` / `archived`), the current cycle position, the starting day chosen at creation, and a nullable end date (for continuous/infinite programs — see [Schedule](../features/schedule.md)). This status field is that entity's own soft-delete/soft-cancel mechanism — it doesn't also need a generic `deletedAt`.
 
 ## Session history
 
