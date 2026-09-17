@@ -1,9 +1,12 @@
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { theme } from '@/lib/theme';
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -19,7 +22,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Workout',
+          title: t('tabs.workout'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="list-check" iconStyle="solid" color={color} size={size} />
           ),
@@ -28,7 +31,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="program"
         options={{
-          title: 'Program',
+          title: t('tabs.program'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="layer-group" iconStyle="solid" color={color} size={size} />
           ),
@@ -37,7 +40,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="start"
         options={{
-          title: 'Start',
+          title: t('tabs.start'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="dumbbell" iconStyle="solid" color={color} size={size + 4} />
           ),
@@ -46,7 +49,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="schedule"
         options={{
-          title: 'Schedule',
+          title: t('tabs.schedule'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="calendar-days" iconStyle="solid" color={color} size={size} />
           ),
@@ -55,7 +58,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: t('tabs.settings'),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="gear" iconStyle="solid" color={color} size={size} />
           ),
