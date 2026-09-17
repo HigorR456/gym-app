@@ -13,6 +13,7 @@ module.exports = {
         },
         primary: '#FACC15',
         text: '#FFFFFF',
+        textMuted: '#737373',
       },
     },
   },

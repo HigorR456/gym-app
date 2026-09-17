@@ -52,6 +52,12 @@ The user must be able to edit this information both before and during execution.
 
 The "add exercises" action opens a local exercise catalog, with a searchable list and filters by muscle group/equipment. Each item shows the name (in the selected language) and a thumbnail image; tapping an exercise opens a preview with more detail before confirming the addition to the Workout.
 
+### Implementation notes
+
+The catalog itself (`ExerciseCatalog`, `ExerciseCard`, `ExerciseImage`, `EmptyState` — see [Architecture](../technical/architecture.md)) was built in [implementation step 7](../process/implementation-roadmap.md), ahead of Workout CRUD, so it's a self-contained, reusable browse/search/preview component. It's temporarily surfaced as the whole Workout tab so it's reachable and testable before Workout CRUD (step 8) exists. Step 8 replaces the tab's content with the real Workout list and reuses this same component as the "add exercises" picker, adding the "confirm add to Workout" action the preview doesn't have yet.
+
+Search matches the exercise name in any of the three languages (not just the current UI language) — filtering by muscle group (`body_part`) and equipment uses the dataset's own values directly, not a curated/translated list.
+
 This same catalog is reused during workout execution (see [Workout Execution](workout-execution.md), "Adding exercises mid-session") and satisfies the "view exercises" offline requirement (see [Architecture](../technical/architecture.md)).
 
 ## Deleting a Workout referenced by Programs

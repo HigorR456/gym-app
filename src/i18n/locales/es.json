@@ -5,5 +5,9 @@
     "start": "Empezar",
     "schedule": "Calendario",
     "settings": "Ajustes"
+  },
+  "exercises": {
+    "searchPlaceholder": "Buscar ejercicios",
+    "noResults": "No se encontraron ejercicios."
   }
 }
