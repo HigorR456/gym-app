@@ -2,7 +2,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { Exercise, ExerciseImages } from '@/features/exercises/types';
 
-type ExerciseRow = {
+export type ExerciseRow = {
   id: string;
   name_en: string;
   name_es: string;
@@ -17,7 +17,7 @@ type ExerciseRow = {
   images: string | null;
 };
 
-function toExercise(row: ExerciseRow): Exercise {
+export function toExercise(row: ExerciseRow): Exercise {
   return {
     id: row.id,
     name: { en: row.name_en, es: row.name_es, de: row.name_de },

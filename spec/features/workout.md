@@ -2,6 +2,13 @@
 
 The **Workout** screen shows the Workouts created by the user.
 
+## Implementation notes (CRUD, step 8)
+
+- Reordering exercises uses simple up/down controls, not drag-and-drop — functionally equivalent for this MVP, much less implementation risk than a gesture-based reorder.
+- Editing (renaming, adding/removing/reordering exercises, changing sets) always saves as "replace all exercises for this Workout" in one transaction, rather than diffing against the previous state — simpler and still correct, since a Workout's exercises/sets aren't referenced by anything outside the Workout itself. This does *not* apply to `workout_sessions`, which snapshot a Workout's exercises/sets at execution time and are never touched by a later edit (see [Database Schema](../technical/database-schema.md)).
+- The "confirm add to Workout" step promised in "Exercise catalog (picker)" above is `ExerciseCatalog`'s `onSelect` prop — the catalog opens as a modal from the Workout editor and adds the picked exercise to the in-progress (unsaved) edit, not directly to SQLite.
+- Deleting a Workout is a plain delete for now — the "referenced by Programs" warning below is deferred to [implementation step 11](../process/implementation-roadmap.md), once Programs (step 9) and the scheduling engine (step 10) exist to check against.
+
 It must be possible to:
 
 - create a Workout

@@ -8,6 +8,27 @@
   },
   "exercises": {
     "searchPlaceholder": "Search exercises",
-    "noResults": "No exercises found."
+    "noResults": "No exercises found.",
+    "addToWorkout": "Add to Workout",
+    "addedToast": "Exercise added",
+    "removedToast": "Exercise removed",
+    "done": "Done"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save"
+  },
+  "workouts": {
+    "empty": "No workouts yet. Create your first one.",
+    "exerciseCount_one": "{{count}} exercise",
+    "exerciseCount_other": "{{count}} exercises",
+    "newWorkout": "New Workout",
+    "namePlaceholder": "Workout name",
+    "addExercises": "Add exercises",
+    "noExercises": "No exercises added yet.",
+    "addSet": "Add set",
+    "deleteTitle": "Delete workout?",
+    "deleteMessage": "This can't be undone."
   }
 }

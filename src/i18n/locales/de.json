@@ -8,6 +8,27 @@
   },
   "exercises": {
     "searchPlaceholder": "Übungen suchen",
-    "noResults": "Keine Übungen gefunden."
+    "noResults": "Keine Übungen gefunden.",
+    "addToWorkout": "Zum Workout hinzufügen",
+    "addedToast": "Übung hinzugefügt",
+    "removedToast": "Übung entfernt",
+    "done": "Fertig"
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "save": "Speichern"
+  },
+  "workouts": {
+    "empty": "Noch keine Workouts. Erstelle dein erstes.",
+    "exerciseCount_one": "{{count}} Übung",
+    "exerciseCount_other": "{{count}} Übungen",
+    "newWorkout": "Neues Workout",
+    "namePlaceholder": "Workout-Name",
+    "addExercises": "Übungen hinzufügen",
+    "noExercises": "Noch keine Übungen hinzugefügt.",
+    "addSet": "Satz hinzufügen",
+    "deleteTitle": "Workout löschen?",
+    "deleteMessage": "Dies kann nicht rückgängig gemacht werden."
   }
 }
