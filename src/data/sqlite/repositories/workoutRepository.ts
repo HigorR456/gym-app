@@ -23,25 +23,39 @@ export type WorkoutInput = {
   exercises: WorkoutExerciseInput[];
 };
 
+// Shared by the Workout list and the Program day "add/change workout"
+// picker (spec/features/program.md) — both preview a Workout's exercises,
+// so this carries exerciseNames (unlocalized, in workout order) alongside
+// the plain count instead of two near-duplicate queries.
 export async function findAllWorkoutSummaries(db: SQLiteDatabase): Promise<WorkoutSummary[]> {
   const rows = await db.getAllAsync<{
     id: string;
     name: string;
     updated_at: string;
-    exercise_count: number;
+    name_en: string | null;
+    name_es: string | null;
+    name_de: string | null;
   }>(
-    `SELECT w.id, w.name, w.updated_at, COUNT(we.id) as exercise_count
+    `SELECT w.id, w.name, w.updated_at, ex.name_en, ex.name_es, ex.name_de
      FROM workouts w
      LEFT JOIN workout_exercises we ON we.workout_id = w.id
-     GROUP BY w.id
-     ORDER BY w.updated_at DESC`,
+     LEFT JOIN exercises ex ON ex.id = we.exercise_id
+     ORDER BY w.updated_at DESC, we.position ASC`,
   );
-  return rows.map((row) => ({
-    id: row.id,
-    name: row.name,
-    exerciseCount: row.exercise_count,
-    updatedAt: row.updated_at,
-  }));
+
+  const byId = new Map<string, WorkoutSummary>();
+  for (const row of rows) {
+    let summary = byId.get(row.id);
+    if (!summary) {
+      summary = { id: row.id, name: row.name, exerciseCount: 0, exerciseNames: [], updatedAt: row.updated_at };
+      byId.set(row.id, summary);
+    }
+    if (row.name_en !== null && row.name_es !== null && row.name_de !== null) {
+      summary.exerciseNames.push({ en: row.name_en, es: row.name_es, de: row.name_de });
+      summary.exerciseCount += 1;
+    }
+  }
+  return [...byId.values()];
 }
 
 type WorkoutExerciseSetRow = ExerciseRow & {

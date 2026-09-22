@@ -30,5 +30,26 @@
     "addSet": "Añadir serie",
     "deleteTitle": "¿Eliminar entrenamiento?",
     "deleteMessage": "Esta acción no se puede deshacer."
+  },
+  "programs": {
+    "empty": "Aún no hay programas. Crea el primero.",
+    "dayCount_one": "{{count}} día",
+    "dayCount_other": "{{count}} días",
+    "copySuffix": "Copia",
+    "namePlaceholder": "Nombre del programa",
+    "descriptionPlaceholder": "Descripción (opcional)",
+    "noDays": "Aún no se añadieron días.",
+    "addWorkoutDay": "Añadir entrenamiento",
+    "addRestDay": "Añadir descanso",
+    "dayLabel": "Día {{number}}",
+    "restDay": "Día de descanso",
+    "assignWorkout": "Asignar entrenamiento",
+    "changeWorkout": "Cambiar entrenamiento",
+    "markAsRest": "Marcar como descanso",
+    "deleteTitle": "¿Eliminar programa?",
+    "deleteMessage": "Esta acción no se puede deshacer.",
+    "duplicateTitle": "Duplicar programa",
+    "duplicateOption": "Duplicar programa",
+    "duplicateWithWorkoutsOption": "Duplicar programa y entrenamientos también"
   }
 }

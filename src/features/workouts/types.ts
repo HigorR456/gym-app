@@ -1,4 +1,4 @@
-import type { Exercise } from '@/features/exercises/types';
+import type { Exercise, LocalizedText } from '@/features/exercises/types';
 
 // Domain types — see spec/technical/data-model.md ("Workout") and
 // spec/technical/database-schema.md. A set has reps OR duration, never
@@ -31,11 +31,14 @@ export type Workout = {
   updatedAt: string;
 };
 
-// Lightweight shape for the Workout list — avoids loading every exercise/set
-// just to show a name and a count.
+// Lightweight shape for the Workout list and the Program day picker — avoids
+// loading full sets just to preview a name, its exercises, and a count.
+// exerciseNames is in workout order and unlocalized (like Exercise.name)
+// so callers pick the current language at render time via pickLocalized.
 export type WorkoutSummary = {
   id: string;
   name: string;
   exerciseCount: number;
+  exerciseNames: LocalizedText[];
   updatedAt: string;
 };

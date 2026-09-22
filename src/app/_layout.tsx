@@ -27,6 +27,15 @@ function AppContent() {
             headerTitle: '',
           }}
         />
+        <Stack.Screen
+          name="program/[id]"
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: theme.background },
+            headerTintColor: theme.text,
+            headerTitle: '',
+          }}
+        />
       </Stack>
     </>
   );

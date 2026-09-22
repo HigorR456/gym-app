@@ -3,15 +3,20 @@ import { Pressable, Text, View } from 'react-native';
 
 import { theme } from '@/lib/theme';
 
+import { FadeTruncatedText } from './FadeTruncatedText';
+
 type Props = {
   name: string;
+  // One line previewing e.g. the Workout's exercise names — rendered above
+  // subtitle, truncated with a fade instead of wrapping/ellipsis.
+  description?: string;
   subtitle?: string;
   onPress: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
 };
 
-export function WorkoutCard({ name, subtitle, onPress, onDuplicate, onDelete }: Props) {
+export function WorkoutCard({ name, description, subtitle, onPress, onDuplicate, onDelete }: Props) {
   return (
     <Pressable
       onPress={onPress}
@@ -19,6 +24,9 @@ export function WorkoutCard({ name, subtitle, onPress, onDuplicate, onDelete }: 
     >
       <View className="flex-1 pr-3">
         <Text className="text-text text-base font-medium">{name}</Text>
+        {description ? (
+          <FadeTruncatedText text={description} className="text-textMuted text-sm mt-1" />
+        ) : null}
         {subtitle ? <Text className="text-textMuted text-sm mt-1">{subtitle}</Text> : null}
       </View>
       <View className="flex-row gap-4">

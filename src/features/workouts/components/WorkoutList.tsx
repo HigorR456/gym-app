@@ -10,12 +10,15 @@ import { EmptyState } from '@/components/EmptyState';
 import { Screen } from '@/components/Screen';
 import { WorkoutCard } from '@/components/WorkoutCard';
 import { deleteWorkout, duplicateWorkout } from '@/data/sqlite/repositories/workoutRepository';
+import type { SupportedLanguage } from '@/i18n';
+import { pickLocalized } from '@/i18n/localizedText';
 import { theme } from '@/lib/theme';
 
 import { useWorkouts } from '../hooks/useWorkouts';
 
 export function WorkoutList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const language = i18n.language as SupportedLanguage;
   const router = useRouter();
   const db = useSQLiteContext();
   const { workouts, loading, refetch } = useWorkouts();
@@ -55,6 +58,11 @@ export function WorkoutList() {
           renderItem={({ item }) => (
             <WorkoutCard
               name={item.name}
+              description={
+                item.exerciseNames.length > 0
+                  ? item.exerciseNames.map((exerciseName) => pickLocalized(exerciseName, language)).join(', ')
+                  : undefined
+              }
               subtitle={t('workouts.exerciseCount', { count: item.exerciseCount })}
               onPress={() => router.push(`/workout/${item.id}`)}
               onDuplicate={() => handleDuplicate(item.id, item.name)}

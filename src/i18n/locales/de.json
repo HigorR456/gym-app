@@ -30,5 +30,26 @@
     "addSet": "Satz hinzufügen",
     "deleteTitle": "Workout löschen?",
     "deleteMessage": "Dies kann nicht rückgängig gemacht werden."
+  },
+  "programs": {
+    "empty": "Noch keine Programme. Erstelle dein erstes.",
+    "dayCount_one": "{{count}} Tag",
+    "dayCount_other": "{{count}} Tage",
+    "copySuffix": "Kopie",
+    "namePlaceholder": "Programmname",
+    "descriptionPlaceholder": "Beschreibung (optional)",
+    "noDays": "Noch keine Tage hinzugefügt.",
+    "addWorkoutDay": "Workout hinzufügen",
+    "addRestDay": "Ruhetag hinzufügen",
+    "dayLabel": "Tag {{number}}",
+    "restDay": "Ruhetag",
+    "assignWorkout": "Workout zuweisen",
+    "changeWorkout": "Workout ändern",
+    "markAsRest": "Als Ruhetag markieren",
+    "deleteTitle": "Programm löschen?",
+    "deleteMessage": "Dies kann nicht rückgängig gemacht werden.",
+    "duplicateTitle": "Programm duplizieren",
+    "duplicateOption": "Programm duplizieren",
+    "duplicateWithWorkoutsOption": "Programm und Workouts duplizieren"
   }
 }

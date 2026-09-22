@@ -30,5 +30,26 @@
     "addSet": "Add set",
     "deleteTitle": "Delete workout?",
     "deleteMessage": "This can't be undone."
+  },
+  "programs": {
+    "empty": "No programs yet. Create your first one.",
+    "dayCount_one": "{{count}} day",
+    "dayCount_other": "{{count}} days",
+    "copySuffix": "Copy",
+    "namePlaceholder": "Program name",
+    "descriptionPlaceholder": "Description (optional)",
+    "noDays": "No days added yet.",
+    "addWorkoutDay": "Add Workout",
+    "addRestDay": "Add Rest",
+    "dayLabel": "Day {{number}}",
+    "restDay": "Rest day",
+    "assignWorkout": "Assign workout",
+    "changeWorkout": "Change workout",
+    "markAsRest": "Mark as rest",
+    "deleteTitle": "Delete program?",
+    "deleteMessage": "This can't be undone.",
+    "duplicateTitle": "Duplicate program",
+    "duplicateOption": "Duplicate program",
+    "duplicateWithWorkoutsOption": "Duplicate program and Workouts too"
   }
 }
