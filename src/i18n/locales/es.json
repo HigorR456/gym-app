@@ -83,5 +83,14 @@
     "legendOne": "1 sesión",
     "legendRest": "Día de descanso",
     "legendNone": "Sin actividad"
+  },
+  "start": {
+    "noSchedule": "No hay un calendario activo. Elige un programa para empezar uno.",
+    "chooseProgram": "Elegir programa",
+    "workoutsHeading": "Entrenamientos",
+    "cancelScheduleTitle": "¿Cancelar el calendario activo?",
+    "cancelScheduleMessage": "Tienes un calendario activo. Empezar este entrenamiento en su lugar lo cancelará por completo. El historial de sesiones se conserva.",
+    "cancelScheduleConfirm": "Empezar de todos modos",
+    "executionPlaceholder": "La ejecución del entrenamiento aún no está lista — llega en el siguiente paso."
   }
 }

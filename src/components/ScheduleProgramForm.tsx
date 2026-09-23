@@ -21,12 +21,11 @@ type Props = {
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
-// Shared by the Schedule screen and (later) the Start screen — spec/
-// features/start.md, "Choose Program": "the same schedule-creation
-// component used on the Schedule screen... as a component shared between
-// the two screens (ScheduleProgramForm)". Only wired into the Schedule
-// screen for now, since Start doesn't exist yet (implementation-roadmap.md
-// step 12).
+// Shared by the Schedule and Start screens — spec/features/start.md,
+// "Choose Program": "the same schedule-creation component used on the
+// Schedule screen... as a component shared between the two screens
+// (ScheduleProgramForm)". Lives in src/components (not a feature folder)
+// per spec/technical/architecture.md's component tree.
 export function ScheduleProgramForm({ visible, onClose, onCreated }: Props) {
   const { t } = useTranslation();
   const db = useSQLiteContext();

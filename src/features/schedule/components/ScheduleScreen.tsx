@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { ConfirmationModal } from '@/components/ConfirmationModal';
+import { CurrentDayCard } from '@/components/CurrentDayCard';
 import { IconSwatch } from '@/components/IconSwatch';
 import { Screen } from '@/components/Screen';
+import { ScheduleProgramForm } from '@/components/ScheduleProgramForm';
 import {
   endSchedule,
   skipActiveScheduleDay,
@@ -15,9 +17,7 @@ import { todayLocalDate } from '@/lib/date';
 import { theme } from '@/lib/theme';
 
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
-import type { ActiveSchedule } from '../types';
 import { ScheduleCalendar } from './ScheduleCalendar';
-import { ScheduleProgramForm } from './ScheduleProgramForm';
 
 export function ScheduleScreen() {
   const { t } = useTranslation();
@@ -150,33 +150,5 @@ export function ScheduleScreen() {
         onCancel={() => setConfirmDelete(false)}
       />
     </Screen>
-  );
-}
-
-function CurrentDayCard({ schedule, onSkip }: { schedule: ActiveSchedule; onSkip: () => void }) {
-  const { t } = useTranslation();
-  const { currentDay, days } = schedule;
-  const day = days.find((d) => d.position === currentDay.position);
-  const title = currentDay.type === 'rest' ? t('programs.restDay') : (day?.workout?.name ?? '');
-  const statusLabel =
-    currentDay.type === 'rest'
-      ? t('schedule.restDayToday')
-      : currentDay.state === 'planned'
-        ? t('schedule.plannedWorkout')
-        : currentDay.overdue
-          ? t('schedule.overdueWorkout')
-          : t('schedule.pendingWorkout');
-
-  return (
-    <View className="rounded-lg bg-surface p-4">
-      <Text className="text-textMuted text-xs">{t('programs.dayLabel', { number: currentDay.position + 1 })}</Text>
-      <Text className="text-text text-base font-medium mt-1">{title}</Text>
-      <Text className="text-textMuted text-sm mt-1">{statusLabel}</Text>
-      {currentDay.type === 'workout' && currentDay.state === 'pending' ? (
-        <Pressable onPress={onSkip} className="mt-3 self-start">
-          <Text className="text-primary text-sm">{t('schedule.skipDay')}</Text>
-        </Pressable>
-      ) : null}
-    </View>
   );
 }

@@ -276,6 +276,7 @@ Build reusable components for recurring elements, including:
 - `ExerciseImage`
 - `EmptyState`
 - `ScheduleProgramForm` — shared between the Schedule and Start features/screens (see [Schedule](../features/schedule.md) and [Start](../features/start.md))
+- `CurrentDayCard` — the active schedule's current day, shown prominently on both the Schedule and Start screens (see [Schedule](../features/schedule.md) and [Start](../features/start.md))
 
 Components should be focused on presentation and interaction. Avoid putting business logic or SQLite queries inside them.
 

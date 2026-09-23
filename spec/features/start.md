@@ -1,5 +1,13 @@
 # Feature: Start Screen
 
+## Implementation notes (step 12)
+
+`StartScreen` (`src/features/start/components/StartScreen.tsx`) reuses `useActiveSchedule` (current day + refetch, same hook the Schedule screen uses) and `useWorkouts` for the plain Workout list below it. `CurrentDayCard` and `ScheduleProgramForm` were promoted out of the Schedule feature into `src/components/` (per [Architecture](../technical/architecture.md)'s component tree) since both are now genuinely shared between the two screens, not schedule-specific.
+
+`requiresCancellationWarning` (`src/features/start/cancellationWarning.ts`) is a small pure function encoding "Starting a workout while a schedule is active" below: no active schedule, or today's day already resolved (`currentDay.state === 'planned'`, meaning the pointer already moved on to a future day) → no warning; a rest day → always warn; a pending workout day → warn unless the picked Workout is the one at `currentDay.position`. Confirming the warning calls the same `endSchedule` the Schedule screen's delete action uses.
+
+Tapping a Workout (directly, via the pending match, or after confirming cancellation) navigates to `/session/[workoutId]`, currently a placeholder screen — no `workout_sessions` row is created at this step. Starting a session, its session-wide timer, and its recovery are [Workout Execution](workout-execution.md) concerns (steps 13-15), and creating an `in_progress` session row without a way to finish or discard it yet would leave it orphaned; that table's writer is step 13.
+
 The **Start** screen is the entry point for starting a workout.
 
 If there's an active schedule, its current day must be the first option, shown prominently/emphasized — the pending workout if today is a workout day, or a **Rest** indicator (no action) if today is a rest day (see [Schedule](schedule.md)).

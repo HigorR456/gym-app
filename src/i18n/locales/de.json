@@ -83,5 +83,14 @@
     "legendOne": "1 Einheit",
     "legendRest": "Ruhetag",
     "legendNone": "Keine Aktivität"
+  },
+  "start": {
+    "noSchedule": "Kein aktiver Zeitplan. Wähle ein Programm, um einen zu starten.",
+    "chooseProgram": "Programm wählen",
+    "workoutsHeading": "Workouts",
+    "cancelScheduleTitle": "Aktiven Zeitplan beenden?",
+    "cancelScheduleMessage": "Du hast einen aktiven Zeitplan. Wenn du stattdessen dieses Workout startest, wird er vollständig beendet. Der Sitzungsverlauf bleibt erhalten.",
+    "cancelScheduleConfirm": "Trotzdem starten",
+    "executionPlaceholder": "Die Workout-Ausführung ist noch nicht implementiert — folgt im nächsten Schritt."
   }
 }
