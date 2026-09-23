@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { up as up0001 } from './0001_initial_schema';
+import { up as up0002 } from './0002_add_icon_columns';
 
 type Migration = {
   version: number;
@@ -10,7 +11,10 @@ type Migration = {
 // Append-only: never edit a migration that has already shipped. Add a new
 // entry with the next version number instead (see spec/technical/architecture.md,
 // "SQLite" — "use versioned migrations").
-const migrations: Migration[] = [{ version: 1, up: up0001 }];
+const migrations: Migration[] = [
+  { version: 1, up: up0001 },
+  { version: 2, up: up0002 },
+];
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {
   await db.execAsync('PRAGMA journal_mode = WAL');

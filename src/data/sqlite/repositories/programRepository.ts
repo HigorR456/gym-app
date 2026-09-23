@@ -3,6 +3,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import type { Program, ProgramDay, ProgramSummary } from '@/features/programs/types';
 import { nowIso } from '@/lib/datetime';
 import { generateId } from '@/lib/id';
+import { DEFAULT_ICON_ID } from '@/lib/icons';
 
 import { duplicateWorkout } from './workoutRepository';
 
@@ -14,6 +15,7 @@ export type ProgramDayInput = {
 export type ProgramInput = {
   name: string;
   description: string | null;
+  icon: string;
   days: ProgramDayInput[];
 };
 
@@ -21,10 +23,11 @@ export async function findAllProgramSummaries(db: SQLiteDatabase): Promise<Progr
   const rows = await db.getAllAsync<{
     id: string;
     name: string;
+    icon: string;
     updated_at: string;
     day_count: number;
   }>(
-    `SELECT p.id, p.name, p.updated_at, COUNT(pd.id) as day_count
+    `SELECT p.id, p.name, p.icon, p.updated_at, COUNT(pd.id) as day_count
      FROM programs p
      LEFT JOIN program_days pd ON pd.program_id = p.id
      GROUP BY p.id
@@ -33,6 +36,7 @@ export async function findAllProgramSummaries(db: SQLiteDatabase): Promise<Progr
   return rows.map((row) => ({
     id: row.id,
     name: row.name,
+    icon: row.icon,
     dayCount: row.day_count,
     updatedAt: row.updated_at,
   }));
@@ -43,6 +47,7 @@ type ProgramDayRow = {
   position: number;
   workout_id: string | null;
   workout_name: string | null;
+  workout_icon: string | null;
 };
 
 export async function findProgramById(db: SQLiteDatabase, id: string): Promise<Program | null> {
@@ -50,16 +55,17 @@ export async function findProgramById(db: SQLiteDatabase, id: string): Promise<P
     id: string;
     name: string;
     description: string | null;
+    icon: string;
     created_at: string;
     updated_at: string;
-  }>('SELECT id, name, description, created_at, updated_at FROM programs WHERE id = ?', id);
+  }>('SELECT id, name, description, icon, created_at, updated_at FROM programs WHERE id = ?', id);
   if (!programRow) {
     return null;
   }
 
   // LEFT JOIN so a rest day (workout_id null) still shows up.
   const rows = await db.getAllAsync<ProgramDayRow>(
-    `SELECT pd.id, pd.position, pd.workout_id, w.name as workout_name
+    `SELECT pd.id, pd.position, pd.workout_id, w.name as workout_name, w.icon as workout_icon
      FROM program_days pd
      LEFT JOIN workouts w ON w.id = pd.workout_id
      WHERE pd.program_id = ?
@@ -70,13 +76,16 @@ export async function findProgramById(db: SQLiteDatabase, id: string): Promise<P
   const days: ProgramDay[] = rows.map((row) => ({
     id: row.id,
     position: row.position,
-    workout: row.workout_id ? { id: row.workout_id, name: row.workout_name ?? '' } : null,
+    workout: row.workout_id
+      ? { id: row.workout_id, name: row.workout_name ?? '', icon: row.workout_icon ?? DEFAULT_ICON_ID }
+      : null,
   }));
 
   return {
     id: programRow.id,
     name: programRow.name,
     description: programRow.description,
+    icon: programRow.icon,
     days,
     createdAt: programRow.created_at,
     updatedAt: programRow.updated_at,
@@ -109,10 +118,11 @@ export async function createProgram(db: SQLiteDatabase, input: ProgramInput): Pr
 
   await db.withTransactionAsync(async () => {
     await db.runAsync(
-      'INSERT INTO programs (id, name, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?)',
+      'INSERT INTO programs (id, name, description, icon, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
       id,
       input.name,
       input.description,
+      input.icon,
       timestamp,
       timestamp,
     );
@@ -130,9 +140,10 @@ export async function updateProgram(db: SQLiteDatabase, id: string, input: Progr
 
   await db.withTransactionAsync(async () => {
     await db.runAsync(
-      'UPDATE programs SET name = ?, description = ?, updated_at = ? WHERE id = ?',
+      'UPDATE programs SET name = ?, description = ?, icon = ?, updated_at = ? WHERE id = ?',
       input.name,
       input.description,
+      input.icon,
       timestamp,
       id,
     );
@@ -160,6 +171,7 @@ export async function duplicateProgram(db: SQLiteDatabase, id: string, newName: 
   return createProgram(db, {
     name: newName,
     description: original.description,
+    icon: original.icon,
     days: original.days.map((day) => ({ workoutId: day.workout?.id ?? null })),
   });
 }
@@ -187,5 +199,5 @@ export async function duplicateProgramWithWorkouts(
     days.push({ workoutId: newWorkoutId });
   }
 
-  return createProgram(db, { name: newName, description: original.description, days });
+  return createProgram(db, { name: newName, description: original.description, icon: original.icon, days });
 }

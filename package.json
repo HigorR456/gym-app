@@ -9,7 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-vector-icons/fontawesome5": "^13.1.4",
     "@react-native-vector-icons/fontawesome6": "^13.1.4",
+    "@react-native-vector-icons/ionicons": "^13.1.4",
+    "@react-native-vector-icons/material-design-icons": "^13.1.4",
+    "@react-native-vector-icons/material-icons": "^13.1.4",
+    "@react-native-vector-icons/simple-line-icons": "^13.1.4",
     "@react-navigation/native": "^7.1.8",
     "babel-preset-expo": "~54.0.10",
     "expo": "~54.0.36",

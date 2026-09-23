@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { ExerciseImage } from '@/components/ExerciseImage';
+import { IconPickerField } from '@/components/IconPickerField';
 import { SetRow } from '@/components/SetRow';
 import { ExerciseCatalog } from '@/features/exercises/components/ExerciseCatalog';
 import type { SupportedLanguage } from '@/i18n';
@@ -25,6 +26,8 @@ export function WorkoutEditor({ workoutId }: Props) {
   const {
     name,
     setName,
+    icon,
+    setIcon,
     exercises,
     loading,
     saving,
@@ -58,6 +61,10 @@ export function WorkoutEditor({ workoutId }: Props) {
           placeholderTextColor={theme.textMuted}
           className="text-text text-xl font-semibold border-b border-surface-100 pb-2"
         />
+
+        <View className="mt-4">
+          <IconPickerField label={t('workouts.iconLabel')} variant="workout" selectedIconId={icon} onSelect={setIcon} />
+        </View>
 
         <View className="mt-4">
           {exercises.length === 0 ? (

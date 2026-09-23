@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
+import { IconPickerField } from '@/components/IconPickerField';
+import { IconSwatch } from '@/components/IconSwatch';
 import type { SupportedLanguage } from '@/i18n';
 import { theme } from '@/lib/theme';
 
@@ -29,6 +31,8 @@ export function ProgramEditor({ programId }: Props) {
     setName,
     description,
     setDescription,
+    icon,
+    setIcon,
     days,
     loading,
     saving,
@@ -79,7 +83,11 @@ export function ProgramEditor({ programId }: Props) {
           className="text-text mt-3 border-b border-surface-100 pb-2"
         />
 
-        <Text className="text-textMuted text-sm mt-3">{t('programs.dayCount', { count: days.length })}</Text>
+        <View className="mt-4">
+          <IconPickerField label={t('programs.iconLabel')} variant="program" selectedIconId={icon} onSelect={setIcon} />
+        </View>
+
+        <Text className="text-textMuted text-sm mt-4">{t('programs.dayCount', { count: days.length })}</Text>
 
         <View className="mt-4">
           {days.length === 0 ? (
@@ -92,6 +100,9 @@ export function ProgramEditor({ programId }: Props) {
                   <Text className="text-text flex-1 font-medium">
                     {day.workout ? day.workout.name : t('programs.restDay')}
                   </Text>
+                  {day.workout ? (
+                    <IconSwatch iconId={day.workout.icon} variant="workout" size={28} />
+                  ) : null}
                   <Pressable onPress={() => moveDay(day.id, -1)} hitSlop={8} disabled={index === 0}>
                     <FontAwesome6
                       name="chevron-up"

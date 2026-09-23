@@ -6,6 +6,7 @@ import { FlatList, Modal, Pressable, Text, View } from 'react-native';
 
 import { EmptyState } from '@/components/EmptyState';
 import { FadeTruncatedText } from '@/components/FadeTruncatedText';
+import { IconSwatch } from '@/components/IconSwatch';
 import { Screen } from '@/components/Screen';
 import { findAllWorkoutSummaries } from '@/data/sqlite/repositories/workoutRepository';
 import type { ProgramDayWorkout } from '@/features/programs/types';
@@ -50,19 +51,24 @@ export function WorkoutPicker({ visible, language, onSelect, onClose }: Props) {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() => onSelect({ id: item.id, name: item.name })}
-              className="border-b border-surface-100 px-4 py-3"
+              onPress={() => onSelect({ id: item.id, name: item.name, icon: item.icon })}
+              className="flex-row items-center border-b border-surface-100 px-4 py-3"
             >
-              <Text className="text-text text-base">{item.name}</Text>
-              {item.exerciseNames.length > 0 ? (
-                <FadeTruncatedText
-                  text={item.exerciseNames.map((name) => pickLocalized(name, language)).join(', ')}
-                  className="text-textMuted text-sm mt-1"
-                />
-              ) : null}
-              <Text className="text-textMuted text-xs mt-1">
-                {t('workouts.exerciseCount', { count: item.exerciseCount })}
-              </Text>
+              <View className="mr-3">
+                <IconSwatch iconId={item.icon} variant="workout" size={36} />
+              </View>
+              <View className="flex-1">
+                <Text className="text-text text-base">{item.name}</Text>
+                {item.exerciseNames.length > 0 ? (
+                  <FadeTruncatedText
+                    text={item.exerciseNames.map((name) => pickLocalized(name, language)).join(', ')}
+                    className="text-textMuted text-sm mt-1"
+                  />
+                ) : null}
+                <Text className="text-textMuted text-xs mt-1">
+                  {t('workouts.exerciseCount', { count: item.exerciseCount })}
+                </Text>
+              </View>
             </Pressable>
           )}
           ListEmptyComponent={<EmptyState message={t('workouts.empty')} compact />}

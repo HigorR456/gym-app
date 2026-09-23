@@ -4,6 +4,7 @@ import { Pressable, Text, View } from 'react-native';
 import { theme } from '@/lib/theme';
 
 import { FadeTruncatedText } from './FadeTruncatedText';
+import { IconSwatch, type IconSwatchVariant } from './IconSwatch';
 
 type Props = {
   name: string;
@@ -11,17 +12,35 @@ type Props = {
   // subtitle, truncated with a fade instead of wrapping/ellipsis.
   description?: string;
   subtitle?: string;
+  // The Workout/Program's own icon (see lib/icons.ts) — shown to the left
+  // of the title. Both must be given together or omitted together.
+  iconId?: string;
+  iconVariant?: IconSwatchVariant;
   onPress: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
 };
 
-export function WorkoutCard({ name, description, subtitle, onPress, onDuplicate, onDelete }: Props) {
+export function WorkoutCard({
+  name,
+  description,
+  subtitle,
+  iconId,
+  iconVariant,
+  onPress,
+  onDuplicate,
+  onDelete,
+}: Props) {
   return (
     <Pressable
       onPress={onPress}
       className="flex-row items-center justify-between border-b border-surface-100 px-4 py-4"
     >
+      {iconVariant ? (
+        <View className="mr-3">
+          <IconSwatch iconId={iconId} variant={iconVariant} size={36} />
+        </View>
+      ) : null}
       <View className="flex-1 pr-3">
         <Text className="text-text text-base font-medium">{name}</Text>
         {description ? (

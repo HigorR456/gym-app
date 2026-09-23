@@ -64,6 +64,8 @@ export function WorkoutList() {
                   : undefined
               }
               subtitle={t('workouts.exerciseCount', { count: item.exerciseCount })}
+              iconId={item.icon}
+              iconVariant="workout"
               onPress={() => router.push(`/workout/${item.id}`)}
               onDuplicate={() => handleDuplicate(item.id, item.name)}
               onDelete={() => setPendingDeleteId(item.id)}

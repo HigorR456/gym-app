@@ -26,6 +26,9 @@ export type WorkoutExercise = {
 export type Workout = {
   id: string;
   name: string;
+  // References an id in lib/icons.ts's ICON_OPTIONS — not in the original
+  // spec, see spec/features/workout.md, "Icon selection".
+  icon: string;
   exercises: WorkoutExercise[];
   createdAt: string;
   updatedAt: string;
@@ -38,6 +41,7 @@ export type Workout = {
 export type WorkoutSummary = {
   id: string;
   name: string;
+  icon: string;
   exerciseCount: number;
   exerciseNames: LocalizedText[];
   updatedAt: string;

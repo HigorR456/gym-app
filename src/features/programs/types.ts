@@ -6,6 +6,10 @@
 export type ProgramDayWorkout = {
   id: string;
   name: string;
+  // The referenced Workout's own icon (see lib/icons.ts) — carried along so
+  // a Program day can show it without a second fetch. Not in the original
+  // spec, see spec/features/program.md, "Icon selection".
+  icon: string;
 };
 
 export type ProgramDay = {
@@ -18,6 +22,9 @@ export type Program = {
   id: string;
   name: string;
   description: string | null;
+  // References an id in lib/icons.ts's ICON_OPTIONS — not in the original
+  // spec, see spec/features/program.md, "Icon selection".
+  icon: string;
   days: ProgramDay[];
   createdAt: string;
   updatedAt: string;
@@ -28,6 +35,7 @@ export type Program = {
 export type ProgramSummary = {
   id: string;
   name: string;
+  icon: string;
   dayCount: number;
   updatedAt: string;
 };

@@ -20,6 +20,7 @@ export type WorkoutExerciseInput = {
 
 export type WorkoutInput = {
   name: string;
+  icon: string;
   exercises: WorkoutExerciseInput[];
 };
 
@@ -31,12 +32,13 @@ export async function findAllWorkoutSummaries(db: SQLiteDatabase): Promise<Worko
   const rows = await db.getAllAsync<{
     id: string;
     name: string;
+    icon: string;
     updated_at: string;
     name_en: string | null;
     name_es: string | null;
     name_de: string | null;
   }>(
-    `SELECT w.id, w.name, w.updated_at, ex.name_en, ex.name_es, ex.name_de
+    `SELECT w.id, w.name, w.icon, w.updated_at, ex.name_en, ex.name_es, ex.name_de
      FROM workouts w
      LEFT JOIN workout_exercises we ON we.workout_id = w.id
      LEFT JOIN exercises ex ON ex.id = we.exercise_id
@@ -47,7 +49,14 @@ export async function findAllWorkoutSummaries(db: SQLiteDatabase): Promise<Worko
   for (const row of rows) {
     let summary = byId.get(row.id);
     if (!summary) {
-      summary = { id: row.id, name: row.name, exerciseCount: 0, exerciseNames: [], updatedAt: row.updated_at };
+      summary = {
+        id: row.id,
+        name: row.name,
+        icon: row.icon,
+        exerciseCount: 0,
+        exerciseNames: [],
+        updatedAt: row.updated_at,
+      };
       byId.set(row.id, summary);
     }
     if (row.name_en !== null && row.name_es !== null && row.name_de !== null) {
@@ -70,10 +79,13 @@ type WorkoutExerciseSetRow = ExerciseRow & {
 };
 
 export async function findWorkoutById(db: SQLiteDatabase, id: string): Promise<Workout | null> {
-  const workoutRow = await db.getFirstAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
-    'SELECT id, name, created_at, updated_at FROM workouts WHERE id = ?',
-    id,
-  );
+  const workoutRow = await db.getFirstAsync<{
+    id: string;
+    name: string;
+    icon: string;
+    created_at: string;
+    updated_at: string;
+  }>('SELECT id, name, icon, created_at, updated_at FROM workouts WHERE id = ?', id);
   if (!workoutRow) {
     return null;
   }
@@ -121,6 +133,7 @@ export async function findWorkoutById(db: SQLiteDatabase, id: string): Promise<W
   return {
     id: workoutRow.id,
     name: workoutRow.name,
+    icon: workoutRow.icon,
     createdAt: workoutRow.created_at,
     updatedAt: workoutRow.updated_at,
     exercises: [...exercisesById.values()].sort((a, b) => a.position - b.position),
@@ -170,9 +183,10 @@ export async function createWorkout(db: SQLiteDatabase, input: WorkoutInput): Pr
 
   await db.withTransactionAsync(async () => {
     await db.runAsync(
-      'INSERT INTO workouts (id, name, created_at, updated_at) VALUES (?, ?, ?, ?)',
+      'INSERT INTO workouts (id, name, icon, created_at, updated_at) VALUES (?, ?, ?, ?, ?)',
       id,
       input.name,
+      input.icon,
       timestamp,
       timestamp,
     );
@@ -191,7 +205,13 @@ export async function updateWorkout(db: SQLiteDatabase, id: string, input: Worko
   const timestamp = nowIso();
 
   await db.withTransactionAsync(async () => {
-    await db.runAsync('UPDATE workouts SET name = ?, updated_at = ? WHERE id = ?', input.name, timestamp, id);
+    await db.runAsync(
+      'UPDATE workouts SET name = ?, icon = ?, updated_at = ? WHERE id = ?',
+      input.name,
+      input.icon,
+      timestamp,
+      id,
+    );
     await db.runAsync('DELETE FROM workout_exercises WHERE workout_id = ?', id);
     await insertExercisesAndSets(db, id, input.exercises, timestamp);
   });
@@ -213,6 +233,7 @@ export async function duplicateWorkout(db: SQLiteDatabase, id: string, newName: 
 
   return createWorkout(db, {
     name: newName,
+    icon: original.icon,
     exercises: original.exercises.map((exercise) => ({
       exerciseId: exercise.exercise.id,
       sets: exercise.sets.map((set) => ({

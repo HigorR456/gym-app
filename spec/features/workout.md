@@ -67,6 +67,14 @@ Search matches the exercise name in any of the three languages (not just the cur
 
 This same catalog is reused during workout execution (see [Workout Execution](workout-execution.md), "Adding exercises mid-session") and satisfies the "view exercises" offline requirement (see [Architecture](../technical/architecture.md)).
 
+## Icon selection
+
+Not in the original scope, added afterwards for visual identification across the Workout list and Program day rows.
+
+Creating/editing a Workout, in addition to its name, includes a picker for an icon from a fixed catalog (`src/lib/icons.ts`'s `ICON_OPTIONS`, drawn from `react-native-vector-icons` families already in the app — Ionicons, MaterialDesignIcons, FontAwesome5/6, MaterialIcons, SimpleLineIcons). The default selection is `weight-lifter` (MaterialDesignIcons).
+
+The icon renders inside a rounded-square swatch: primary/yellow background, black icon (`IconSwatch`, `variant="workout"`). It's shown to the right of the Workout's title in the Workout list, and next to any Program day that references that Workout (see [Program](program.md), "Icon selection") — never on a rest day, so the two states stay visually distinct at a glance.
+
 ## Deleting a Workout referenced by Programs
 
 When deleting a Workout, show a confirmation popup listing which Programs use that Workout in any of their days, if any.

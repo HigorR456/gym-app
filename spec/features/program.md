@@ -37,6 +37,14 @@ When the user taps "duplicate program", show a popup with two clear options:
 
 Note for future versions: the "and Workouts too" option is a candidate to become a premium feature.
 
+## Icon selection
+
+Not in the original scope, added afterwards for visual identification across the Program list.
+
+Creating/editing a Program, in addition to its name and optional description, includes a picker for an icon from the same fixed catalog Workouts use (see [Workout](workout.md), "Icon selection"). The default selection is `weight-lifter` (MaterialDesignIcons).
+
+The icon renders inside a rounded-square swatch styled distinctly from a Workout's: black background, primary/yellow border and icon (`IconSwatch`, `variant="program"`) — so a Program's own icon is never visually confused with a referenced Workout's icon shown inside it. Shown to the right of the Program's title in the Program list.
+
 ## Editing/deleting a Program with an active schedule
 
 If the Program has an active schedule (see [Schedule](schedule.md)), editing its structure (adding/removing/reordering days, marking/unmarking a day as rest) or deleting the Program must always show a confirmation popup warning that an active schedule is linked to it.

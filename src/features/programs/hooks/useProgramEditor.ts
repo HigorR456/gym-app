@@ -9,6 +9,7 @@ import {
 } from '@/data/sqlite/repositories/programRepository';
 import type { ProgramDayWorkout } from '@/features/programs/types';
 import { generateId } from '@/lib/id';
+import { DEFAULT_ICON_ID } from '@/lib/icons';
 
 export type EditableDay = {
   id: string;
@@ -23,6 +24,7 @@ export function useProgramEditor(programId: string | undefined) {
   const db = useSQLiteContext();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [icon, setIcon] = useState(DEFAULT_ICON_ID);
   const [days, setDays] = useState<EditableDay[]>([]);
   const [loading, setLoading] = useState(!!programId);
   const [saving, setSaving] = useState(false);
@@ -36,6 +38,7 @@ export function useProgramEditor(programId: string | undefined) {
       if (!cancelled && program) {
         setName(program.name);
         setDescription(program.description ?? '');
+        setIcon(program.icon);
         setDays(program.days.map((day) => ({ id: day.id, workout: day.workout })));
         setLoading(false);
       }
@@ -85,6 +88,7 @@ export function useProgramEditor(programId: string | undefined) {
       const input: ProgramInput = {
         name: name.trim(),
         description: description.trim() || null,
+        icon,
         days: days.map((d) => ({ workoutId: d.workout?.id ?? null })),
       };
       if (programId) {
@@ -104,6 +108,8 @@ export function useProgramEditor(programId: string | undefined) {
     setName,
     description,
     setDescription,
+    icon,
+    setIcon,
     days,
     loading,
     saving,

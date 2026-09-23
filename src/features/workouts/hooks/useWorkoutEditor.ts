@@ -9,6 +9,7 @@ import {
 } from '@/data/sqlite/repositories/workoutRepository';
 import type { Exercise } from '@/features/exercises/types';
 import { generateId } from '@/lib/id';
+import { DEFAULT_ICON_ID } from '@/lib/icons';
 
 export type EditableSet = {
   id: string;
@@ -30,6 +31,7 @@ export type EditableExercise = {
 export function useWorkoutEditor(workoutId: string | undefined) {
   const db = useSQLiteContext();
   const [name, setName] = useState('');
+  const [icon, setIcon] = useState(DEFAULT_ICON_ID);
   const [exercises, setExercises] = useState<EditableExercise[]>([]);
   const [loading, setLoading] = useState(!!workoutId);
   const [saving, setSaving] = useState(false);
@@ -42,6 +44,7 @@ export function useWorkoutEditor(workoutId: string | undefined) {
     findWorkoutById(db, workoutId).then((workout) => {
       if (!cancelled && workout) {
         setName(workout.name);
+        setIcon(workout.icon);
         setExercises(
           workout.exercises.map((we) => ({
             id: we.id,
@@ -131,6 +134,7 @@ export function useWorkoutEditor(workoutId: string | undefined) {
     try {
       const input: WorkoutInput = {
         name: name.trim(),
+        icon,
         exercises: exercises.map((e) => ({
           exerciseId: e.exercise.id,
           sets: e.sets.map((s) => ({
@@ -156,6 +160,8 @@ export function useWorkoutEditor(workoutId: string | undefined) {
   return {
     name,
     setName,
+    icon,
+    setIcon,
     exercises,
     loading,
     saving,

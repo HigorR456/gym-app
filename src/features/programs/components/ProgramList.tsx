@@ -79,6 +79,8 @@ export function ProgramList() {
             <WorkoutCard
               name={item.name}
               subtitle={t('programs.dayCount', { count: item.dayCount })}
+              iconId={item.icon}
+              iconVariant="program"
               onPress={() => router.push(`/program/${item.id}`)}
               onDuplicate={() => setDuplicateTarget({ id: item.id, name: item.name })}
               onDelete={() => setPendingDeleteId(item.id)}
