@@ -88,9 +88,25 @@
     "noSchedule": "Kein aktiver Zeitplan. Wähle ein Programm, um einen zu starten.",
     "chooseProgram": "Programm wählen",
     "workoutsHeading": "Workouts",
+    "startWorkout": "Workout starten",
     "cancelScheduleTitle": "Aktiven Zeitplan beenden?",
     "cancelScheduleMessage": "Du hast einen aktiven Zeitplan. Wenn du stattdessen dieses Workout startest, wird er vollständig beendet. Der Sitzungsverlauf bleibt erhalten.",
-    "cancelScheduleConfirm": "Trotzdem starten",
-    "executionPlaceholder": "Die Workout-Ausführung ist noch nicht implementiert — folgt im nächsten Schritt."
+    "cancelScheduleConfirm": "Trotzdem starten"
+  },
+  "session": {
+    "exerciseCounter": "Übung {{current}}/{{total}}",
+    "finishWorkout": "Workout beenden",
+    "finishTitle": "Workout beenden?",
+    "finishMessage": "Du hast {{completed}} von {{total}} Übungen abgeschlossen. Gesamtzeit: {{duration}}.",
+    "finishConfirm": "Beenden",
+    "finishCancel": "Weiter",
+    "discardAction": "Verwerfen",
+    "discardTitle": "Sitzung verwerfen?",
+    "discardMessage": "Dies kann nicht rückgängig gemacht werden. Die Sitzung wird nicht gespeichert.",
+    "discardConfirm": "Verwerfen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "addExercise": "Übung hinzufügen",
+    "noExercises": "Noch keine Übungen. Füge eine hinzu, um zu starten."
   }
 }

@@ -1,14 +1,29 @@
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
-import type { EditableSet } from '@/features/workouts/hooks/useWorkoutEditor';
 import { theme } from '@/lib/theme';
+
+// Structural, not imported from a feature — both the Workout editor's
+// EditableSet and the session execution's SessionSet satisfy this shape
+// (spec/features/workout.md and spec/features/workout-execution.md share
+// the same weight/reps/duration/rest fields).
+export type SetFields = {
+  weight: number | null;
+  reps: number | null;
+  durationSeconds: number | null;
+  restSeconds: number | null;
+};
 
 type Props = {
   index: number;
-  set: EditableSet;
-  onChange: (patch: Partial<EditableSet>) => void;
+  set: SetFields;
+  onChange: (patch: Partial<SetFields>) => void;
   onRemove: () => void;
+  // Session execution only (spec/features/workout-execution.md, "Sets":
+  // "marking the set as completed") — omitted in the plain Workout editor,
+  // where a set has no completion state.
+  completed?: boolean;
+  onToggleComplete?: () => void;
 };
 
 function toNumberOrNull(text: string): number | null {
@@ -43,7 +58,7 @@ function NumericField({
 // Shows both reps and duration fields rather than a mode toggle — a set has
 // reps OR duration (spec/technical/data-model.md), but either can be left
 // blank, so there's no need to force a choice in the UI.
-export function SetRow({ index, set, onChange, onRemove }: Props) {
+export function SetRow({ index, set, onChange, onRemove, completed, onToggleComplete }: Props) {
   return (
     <View className="flex-row items-center gap-2 py-2">
       <Text className="text-textMuted w-6 text-center">{index + 1}</Text>
@@ -59,6 +74,16 @@ export function SetRow({ index, set, onChange, onRemove }: Props) {
         onChangeText={(v) => onChange({ restSeconds: toNumberOrNull(v) })}
         placeholder="rest"
       />
+      {onToggleComplete ? (
+        <Pressable onPress={onToggleComplete} hitSlop={8}>
+          <FontAwesome6
+            name="circle-check"
+            iconStyle={completed ? 'solid' : 'regular'}
+            color={completed ? theme.primary : theme.textMuted}
+            size={18}
+          />
+        </Pressable>
+      ) : null}
       <Pressable onPress={onRemove} hitSlop={8}>
         <FontAwesome6 name="xmark" iconStyle="solid" color={theme.textMuted} size={16} />
       </Pressable>

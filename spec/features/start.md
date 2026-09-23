@@ -6,7 +6,9 @@
 
 `requiresCancellationWarning` (`src/features/start/cancellationWarning.ts`) is a small pure function encoding "Starting a workout while a schedule is active" below: no active schedule, or today's day already resolved (`currentDay.state === 'planned'`, meaning the pointer already moved on to a future day) → no warning; a rest day → always warn; a pending workout day → warn unless the picked Workout is the one at `currentDay.position`. Confirming the warning calls the same `endSchedule` the Schedule screen's delete action uses.
 
-Tapping a Workout (directly, via the pending match, or after confirming cancellation) navigates to `/session/[workoutId]`, currently a placeholder screen — no `workout_sessions` row is created at this step. Starting a session, its session-wide timer, and its recovery are [Workout Execution](workout-execution.md) concerns (steps 13-15), and creating an `in_progress` session row without a way to finish or discard it yet would leave it orphaned; that table's writer is step 13.
+## Implementation notes (step 13)
+
+Tapping a Workout (directly, via the pending match, or after confirming cancellation) now calls `sessionRepository.startSession` and navigates to `/session/[sessionId]` (see [Workout Execution](workout-execution.md)). `StartScreen` is what decides `programId`/`scheduledProgramId` for "Finishing the workout" below: tapping `CurrentDayCard`'s new "Start workout" action (only shown there, via its optional `onStart` prop — the Schedule screen's own use of `CurrentDayCard` omits it) is the "Program → Today's Workout" flow and tags both; a direct Workout-list pick that happens to match today's pending day tags only `scheduledProgramId`; any other direct pick, or one confirmed past the cancellation warning, tags neither.
 
 The **Start** screen is the entry point for starting a workout.
 

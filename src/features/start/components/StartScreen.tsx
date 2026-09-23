@@ -11,6 +11,7 @@ import { Screen } from '@/components/Screen';
 import { ScheduleProgramForm } from '@/components/ScheduleProgramForm';
 import { WorkoutCard } from '@/components/WorkoutCard';
 import { endSchedule, skipActiveScheduleDay } from '@/data/sqlite/repositories/scheduleRepository';
+import { startSession } from '@/data/sqlite/repositories/sessionRepository';
 import { useActiveSchedule } from '@/features/schedule/hooks/useActiveSchedule';
 import { useWorkouts } from '@/features/workouts/hooks/useWorkouts';
 import type { WorkoutSummary } from '@/features/workouts/types';
@@ -34,8 +35,27 @@ export function StartScreen() {
     await refetchSchedule();
   }
 
-  function startWorkout(workoutId: string) {
-    router.push(`/session/${workoutId}`);
+  // programId/scheduledProgramId determine whether finishing this session
+  // updates the Schedule (spec/features/workout-execution.md, "Finishing
+  // the workout") — see sessionRepository.startSession's doc comment.
+  async function startWorkout(workoutId: string, programId: string | null, scheduledProgramId: string | null) {
+    const sessionId = await startSession(db, { workoutId, programId, scheduledProgramId });
+    router.push(`/session/${sessionId}`);
+  }
+
+  // "Start via Program: Start → Program → Today's Workout → Exercises"
+  // (spec/features/start.md) — tapping the current day card when it's a
+  // pending workout day starts it directly, no warning (it's exactly what
+  // the schedule already has planned).
+  async function handleStartScheduled() {
+    if (!schedule || schedule.currentDay.type !== 'workout') {
+      return;
+    }
+    const day = schedule.days.find((d) => d.position === schedule.currentDay.position);
+    if (!day?.workout) {
+      return;
+    }
+    await startWorkout(day.workout.id, schedule.programId, schedule.id);
   }
 
   // spec/features/start.md, "Starting a workout while a schedule is
@@ -47,7 +67,11 @@ export function StartScreen() {
       setPendingWorkout(workout);
       return;
     }
-    startWorkout(workout.id);
+    // A direct pick that happens to match today's pending workout still
+    // updates the Schedule once finished, but isn't "via Program" (see
+    // sessionRepository.startSession) — only tag scheduledProgramId.
+    const matchesPendingDay = schedule?.currentDay.type === 'workout' && schedule.currentDay.state === 'pending';
+    void startWorkout(workout.id, null, matchesPendingDay ? (schedule?.id ?? null) : null);
   }
 
   async function handleConfirmCancelSchedule() {
@@ -58,7 +82,7 @@ export function StartScreen() {
     const workoutId = pendingWorkout.id;
     setPendingWorkout(null);
     await refetchSchedule();
-    startWorkout(workoutId);
+    await startWorkout(workoutId, null, null);
   }
 
   if (scheduleLoading) {
@@ -76,7 +100,7 @@ export function StartScreen() {
             <Text className="text-text text-xl font-semibold mb-4">{t('tabs.start')}</Text>
 
             {schedule ? (
-              <CurrentDayCard schedule={schedule} onSkip={handleSkip} />
+              <CurrentDayCard schedule={schedule} onSkip={handleSkip} onStart={() => void handleStartScheduled()} />
             ) : (
               <>
                 <Text className="text-textMuted mb-4">{t('start.noSchedule')}</Text>

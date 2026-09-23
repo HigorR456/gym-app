@@ -88,9 +88,25 @@
     "noSchedule": "No hay un calendario activo. Elige un programa para empezar uno.",
     "chooseProgram": "Elegir programa",
     "workoutsHeading": "Entrenamientos",
+    "startWorkout": "Empezar entrenamiento",
     "cancelScheduleTitle": "¿Cancelar el calendario activo?",
     "cancelScheduleMessage": "Tienes un calendario activo. Empezar este entrenamiento en su lugar lo cancelará por completo. El historial de sesiones se conserva.",
-    "cancelScheduleConfirm": "Empezar de todos modos",
-    "executionPlaceholder": "La ejecución del entrenamiento aún no está lista — llega en el siguiente paso."
+    "cancelScheduleConfirm": "Empezar de todos modos"
+  },
+  "session": {
+    "exerciseCounter": "Ejercicio {{current}}/{{total}}",
+    "finishWorkout": "Terminar entrenamiento",
+    "finishTitle": "¿Terminar entrenamiento?",
+    "finishMessage": "Completaste {{completed}} de {{total}} ejercicios. Tiempo total: {{duration}}.",
+    "finishConfirm": "Terminar",
+    "finishCancel": "Continuar",
+    "discardAction": "Descartar",
+    "discardTitle": "¿Descartar sesión?",
+    "discardMessage": "Esta acción no se puede deshacer. La sesión no se guardará.",
+    "discardConfirm": "Descartar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "addExercise": "Añadir ejercicio",
+    "noExercises": "Aún no hay ejercicios. Añade uno para empezar."
   }
 }

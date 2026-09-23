@@ -88,9 +88,25 @@
     "noSchedule": "No active schedule. Choose a Program to start one.",
     "chooseProgram": "Choose Program",
     "workoutsHeading": "Workouts",
+    "startWorkout": "Start workout",
     "cancelScheduleTitle": "Cancel active schedule?",
     "cancelScheduleMessage": "You have an active schedule. Starting this workout instead will cancel it entirely. Session history is kept.",
-    "cancelScheduleConfirm": "Start anyway",
-    "executionPlaceholder": "Workout execution isn't built yet — coming in the next step."
+    "cancelScheduleConfirm": "Start anyway"
+  },
+  "session": {
+    "exerciseCounter": "Exercise {{current}}/{{total}}",
+    "finishWorkout": "Finish Workout",
+    "finishTitle": "Finish workout?",
+    "finishMessage": "You completed {{completed}} of {{total}} exercises. Total time: {{duration}}.",
+    "finishConfirm": "Finish",
+    "finishCancel": "Continue",
+    "discardAction": "Discard",
+    "discardTitle": "Discard session?",
+    "discardMessage": "This can't be undone. The session won't be saved.",
+    "discardConfirm": "Discard",
+    "previous": "Previous",
+    "next": "Next",
+    "addExercise": "Add exercise",
+    "noExercises": "No exercises yet. Add one to get started."
   }
 }

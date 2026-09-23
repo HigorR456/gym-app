@@ -1,5 +1,15 @@
 # Feature: Workout Execution
 
+## Implementation notes (step 13)
+
+`sessionRepository.ts` persists write-through rather than batching everything into a single save at Finish (unlike `WorkoutEditor`'s "replace all on save" — see [Workout](workout.md)): `startSession` immediately snapshots the Workout's current exercises/sets into `session_exercises`/`session_sets` and every later mutation (set edit, mark complete, add/remove set, add exercise) writes straight to SQLite. This is what [Business Rules](../technical/business-rules.md) rules 7 and 10 ("a workout session must not be lost if the app is temporarily backgrounded" / "session state must be recoverable... whenever technically possible") require at the data layer — `useSessionExecution` mirrors each write into local state after persisting, not before. `SessionScreen` (`src/features/session/components/`) is one exercise at a time, matching the header's "Exercise X/Y".
+
+Two things stay out of scope for this step, on purpose:
+- **Timers.** No rest-timer popup opens when a set is marked complete, and the Finish confirmation's "Total time" is a static duration computed from `started_at` to the moment Finish is tapped, not a live ticking clock. The `Timer`/`RestTimer` components (see [Architecture](../technical/architecture.md)) are step 14.
+- **Boot-time recovery.** Nothing yet offers to resume an `in_progress` session when the app reopens — that's step 15. The session is already safely persisted by then (see above), so step 15 only has to add the "offer to resume" UI on top, not change how sessions are written.
+
+Finishing a session never has to separately "mark the scheduled day completed" — `finishSession` just sets `status`/`ended_at`, and `scheduleRepository.reconcileActiveSchedule`'s existing `hasCheckout` lookup (built in step 11) already reads completed sessions by `scheduled_program_id`, so the schedule picks it up the next time it's reconciled (next app open/resume, or the Start/Schedule screens' own focus-refetch). `startSession`'s caller (`StartScreen`, see [Start](start.md)) decides whether to tag `programId`/`scheduledProgramId` at all, per "Finishing the workout" below.
+
 This covers the full live-execution flow: starting a session, the exercise screen, sets, the rest timer, adding exercises mid-session, navigating between exercises, and finishing the workout.
 
 ## Starting a session

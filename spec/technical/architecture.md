@@ -134,6 +134,8 @@ src/
 
 Adjust this structure if a better organization emerges for the actual codebase, but preserve the architectural principles.
 
+**NativeWind spacing gotcha**: observed at least once (`CurrentDayCard`'s "Start workout"/"Skip day" row, step 13) where neither a `flex-row` View's `gap-*` utility nor a `mr-*` className on the non-last child produced any visual spacing on-device, surviving a full reload — while the same utilities work correctly elsewhere in the app (e.g. `ConfirmationModal`'s button row). Only an inline `style={{ marginRight: ... }}` fixed it. Root cause not identified — if this recurs, reach for inline `style` for that one element rather than debugging NativeWind further.
+
 **Note on `app/`**: because Expo Router is file-based (every file under `app/` becomes a route), `app/` must contain route files only — layouts and screens. That's why `providers/` lives as a sibling of `app/`, not nested inside it as originally sketched: a `providers/` folder inside `app/` would itself be picked up as routable. Non-route helpers always live outside `app/`.
 
 Import from `src/` using the `@/` path alias (e.g. `@/lib/theme`, `@/providers/AppProviders`) instead of relative `../../..` chains — configured once in `tsconfig.json`.
