@@ -17,7 +17,9 @@
   "common": {
     "cancel": "Cancelar",
     "delete": "Eliminar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "yes": "Sí",
+    "no": "No"
   },
   "workouts": {
     "empty": "Aún no hay entrenamientos. Crea el primero.",
@@ -30,7 +32,9 @@
     "noExercises": "Aún no se añadieron ejercicios.",
     "addSet": "Añadir serie",
     "deleteTitle": "¿Eliminar entrenamiento?",
-    "deleteMessage": "Esta acción no se puede deshacer."
+    "deleteMessage": "Esta acción no se puede deshacer.",
+    "deleteReferencedMessage": "Se usa en: {{programs}}. Esos días pasarán a ser días de descanso. Esta acción no se puede deshacer.",
+    "deleteReferencedActiveScheduleMessage": "Se usa en: {{programs}}, incluyendo un programa con un calendario activo. Esos días pasarán a ser días de descanso. Esta acción no se puede deshacer."
   },
   "programs": {
     "empty": "Aún no hay programas. Crea el primero.",
@@ -50,8 +54,34 @@
     "markAsRest": "Marcar como descanso",
     "deleteTitle": "¿Eliminar programa?",
     "deleteMessage": "Esta acción no se puede deshacer.",
+    "deleteActiveScheduleMessage": "Este programa tiene un calendario activo — eliminarlo también terminará ese calendario. Esta acción no se puede deshacer.",
     "duplicateTitle": "Duplicar programa",
     "duplicateOption": "Duplicar programa",
-    "duplicateWithWorkoutsOption": "Duplicar programa y entrenamientos también"
+    "duplicateWithWorkoutsOption": "Duplicar programa y entrenamientos también",
+    "activeScheduleEditTitle": "Calendario activo vinculado",
+    "activeScheduleEditMessage": "Este programa tiene un calendario activo. Cambiar sus días puede afectarlo."
+  },
+  "schedule": {
+    "empty": "No hay un calendario activo. Elige un programa para empezar uno.",
+    "chooseProgram": "Elegir programa",
+    "activeScheduleExists": "Ya existe un calendario activo. Termínalo o elimínalo antes de crear uno nuevo.",
+    "startDayLabel": "Empezar en el día",
+    "startDateLabel": "Fecha de inicio",
+    "continuousLabel": "Continuo (sin fecha de fin)",
+    "endDateLabel": "Fecha de fin",
+    "createAction": "Crear calendario",
+    "changeEndDate": "Cambiar fecha de fin",
+    "deleteSchedule": "Eliminar calendario",
+    "deleteTitle": "¿Eliminar calendario?",
+    "deleteMessage": "Esto termina el calendario activo. El historial de sesiones se conserva.",
+    "skipDay": "Saltar día",
+    "restDayToday": "Día de descanso",
+    "plannedWorkout": "Planeado",
+    "pendingWorkout": "Pendiente",
+    "overdueWorkout": "Atrasado",
+    "legendMultiple": "Varias sesiones",
+    "legendOne": "1 sesión",
+    "legendRest": "Día de descanso",
+    "legendNone": "Sin actividad"
   }
 }

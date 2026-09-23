@@ -1,11 +1,14 @@
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
+import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { IconPickerField } from '@/components/IconPickerField';
 import { IconSwatch } from '@/components/IconSwatch';
+import { findActiveScheduleForProgram, realignScheduleToNewDayCount } from '@/data/sqlite/repositories/scheduleRepository';
 import type { SupportedLanguage } from '@/i18n';
 import { theme } from '@/lib/theme';
 
@@ -26,6 +29,7 @@ export function ProgramEditor({ programId }: Props) {
   const { t, i18n } = useTranslation();
   const language = i18n.language as SupportedLanguage;
   const router = useRouter();
+  const db = useSQLiteContext();
   const {
     name,
     setName,
@@ -45,14 +49,59 @@ export function ProgramEditor({ programId }: Props) {
     save,
   } = useProgramEditor(programId);
   const [pickerTarget, setPickerTarget] = useState<PickerTarget | null>(null);
+  const [activeScheduleId, setActiveScheduleId] = useState<string | null>(null);
+  const [confirmStructuralEdit, setConfirmStructuralEdit] = useState(false);
+  // Captured once, right after the initial load, to detect structural
+  // changes at save time (spec/features/program.md, "Editing/deleting a
+  // Program with an active schedule").
+  const initialDayWorkoutIdsRef = useRef<(string | null)[] | null>(null);
+
+  useEffect(() => {
+    if (!programId) {
+      return;
+    }
+    findActiveScheduleForProgram(db, programId).then((schedule) => setActiveScheduleId(schedule?.id ?? null));
+  }, [db, programId]);
+
+  useEffect(() => {
+    if (!loading && initialDayWorkoutIdsRef.current === null) {
+      initialDayWorkoutIdsRef.current = days.map((day) => day.workout?.id ?? null);
+    }
+  }, [loading, days]);
 
   if (loading) {
     return <View className="flex-1 bg-background" />;
   }
 
-  async function handleSave() {
+  function hasStructuralChange(): boolean {
+    const initial = initialDayWorkoutIdsRef.current;
+    if (!initial) {
+      return false;
+    }
+    const current = days.map((day) => day.workout?.id ?? null);
+    return initial.length !== current.length || initial.some((workoutId, index) => workoutId !== current[index]);
+  }
+
+  async function persistSave() {
+    const previousDayCount = initialDayWorkoutIdsRef.current?.length ?? days.length;
     await save();
+    if (activeScheduleId && days.length !== previousDayCount) {
+      await realignScheduleToNewDayCount(db, activeScheduleId, days.length);
+    }
     router.back();
+  }
+
+  async function handleSave() {
+    if (activeScheduleId && hasStructuralChange()) {
+      setConfirmStructuralEdit(true);
+      return;
+    }
+    await persistSave();
+  }
+
+  async function handleConfirmStructuralEdit() {
+    setConfirmStructuralEdit(false);
+    await persistSave();
   }
 
   function handlePickWorkout(workout: ProgramDayWorkout) {
@@ -174,6 +223,16 @@ export function ProgramEditor({ programId }: Props) {
         language={language}
         onSelect={handlePickWorkout}
         onClose={() => setPickerTarget(null)}
+      />
+
+      <ConfirmationModal
+        visible={confirmStructuralEdit}
+        title={t('programs.activeScheduleEditTitle')}
+        message={t('programs.activeScheduleEditMessage')}
+        confirmLabel={t('common.save')}
+        cancelLabel={t('common.cancel')}
+        onConfirm={handleConfirmStructuralEdit}
+        onCancel={() => setConfirmStructuralEdit(false)}
       />
     </View>
   );

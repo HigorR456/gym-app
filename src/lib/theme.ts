@@ -8,6 +8,12 @@ export const theme = {
   surface100: '#262626',
   surface200: '#404040',
   primary: '#FACC15',
+  // Two more intensities of the same yellow, used only by the Schedule
+  // calendar heatmap (spec/features/schedule.md, "Calendar heatmap": light
+  // yellow for >1 session, yellow for exactly 1, dark yellow for a planned
+  // rest day with no session).
+  primaryLight: '#FEF08A',
+  primaryDark: '#CA8A04',
   text: '#FFFFFF',
   textMuted: '#737373',
 } as const;

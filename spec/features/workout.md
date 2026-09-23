@@ -7,7 +7,7 @@ The **Workout** screen shows the Workouts created by the user.
 - Reordering exercises uses simple up/down controls, not drag-and-drop — functionally equivalent for this MVP, much less implementation risk than a gesture-based reorder.
 - Editing (renaming, adding/removing/reordering exercises, changing sets) always saves as "replace all exercises for this Workout" in one transaction, rather than diffing against the previous state — simpler and still correct, since a Workout's exercises/sets aren't referenced by anything outside the Workout itself. This does *not* apply to `workout_sessions`, which snapshot a Workout's exercises/sets at execution time and are never touched by a later edit (see [Database Schema](../technical/database-schema.md)).
 - The "confirm add to Workout" step promised in "Exercise catalog (picker)" above is `ExerciseCatalog`'s `onSelect` prop — the catalog opens as a modal from the Workout editor and adds the picked exercise to the in-progress (unsaved) edit, not directly to SQLite.
-- Deleting a Workout is a plain delete for now — the "referenced by Programs" warning below is deferred to [implementation step 11](../process/implementation-roadmap.md), once Programs (step 9) and the scheduling engine (step 10) exist to check against.
+- Deleting a Workout checks for referencing Programs and shows the warning described below as of [implementation step 11](../process/implementation-roadmap.md) — before that (steps 8-10, once Programs and the scheduling engine existed to check against), it was a plain delete.
 
 It must be possible to:
 
@@ -73,7 +73,7 @@ Not in the original scope, added afterwards for visual identification across the
 
 Creating/editing a Workout, in addition to its name, includes a picker for an icon from a fixed catalog (`src/lib/icons.ts`'s `ICON_OPTIONS`, drawn from `react-native-vector-icons` families already in the app — Ionicons, MaterialDesignIcons, FontAwesome5/6, MaterialIcons, SimpleLineIcons). The default selection is `weight-lifter` (MaterialDesignIcons).
 
-The icon renders inside a rounded-square swatch: primary/yellow background, black icon (`IconSwatch`, `variant="workout"`). It's shown to the right of the Workout's title in the Workout list, and next to any Program day that references that Workout (see [Program](program.md), "Icon selection") — never on a rest day, so the two states stay visually distinct at a glance.
+The icon renders inside a rounded-square swatch: primary/yellow background, black icon (`IconSwatch`, `variant="workout"`). It's shown to the left of the Workout's title in the Workout list, and next to any Program day that references that Workout (see [Program](program.md), "Icon selection") — never on a rest day, so the two states stay visually distinct at a glance. In both the Workout and Program editors, only the currently selected icon is shown (`IconPickerField`); tapping it opens the full catalog in a modal (`IconPicker`) instead of the grid always being visible inline.
 
 ## Deleting a Workout referenced by Programs
 

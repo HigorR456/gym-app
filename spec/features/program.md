@@ -43,7 +43,7 @@ Not in the original scope, added afterwards for visual identification across the
 
 Creating/editing a Program, in addition to its name and optional description, includes a picker for an icon from the same fixed catalog Workouts use (see [Workout](workout.md), "Icon selection"). The default selection is `weight-lifter` (MaterialDesignIcons).
 
-The icon renders inside a rounded-square swatch styled distinctly from a Workout's: black background, primary/yellow border and icon (`IconSwatch`, `variant="program"`) — so a Program's own icon is never visually confused with a referenced Workout's icon shown inside it. Shown to the right of the Program's title in the Program list.
+The icon renders inside a rounded-square swatch styled distinctly from a Workout's: black background, primary/yellow border and icon (`IconSwatch`, `variant="program"`) — so a Program's own icon is never visually confused with a referenced Workout's icon shown inside it. Shown to the left of the Program's title in the Program list, and next to each Workout in the day-picker used to build a Program (`WorkoutPicker`) — same left-of-title placement as everywhere else an icon appears in a listing.
 
 ## Editing/deleting a Program with an active schedule
 
@@ -52,3 +52,7 @@ If the Program has an active schedule (see [Schedule](schedule.md)), editing its
 Deleting a Program with an active schedule also ends the corresponding schedule (archived/cancelled) — see [Schedule](schedule.md).
 
 Changing the number of days of a Program with an active schedule recalculates the current cycle position (the day the schedule is on) modulo the new day count, so it stays within valid bounds.
+
+### Implementation notes (step 11)
+
+`ProgramEditor` captures the loaded day sequence (by Workout id per position) once on mount and compares it against the current one at save time — any difference in length or in any position's Workout counts as a structural change. The confirmation popup only appears when that comparison finds a change *and* an active schedule references the Program (`findActiveScheduleForProgram`); pure renames/description/icon edits never trigger it. After a confirmed save, if the day count changed, `realignScheduleToNewDayCount` applies the modulo recalculation described above.

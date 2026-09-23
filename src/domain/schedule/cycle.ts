@@ -1,4 +1,4 @@
-import { addDaysToLocalDate } from '@/lib/date';
+import { addDaysToLocalDate, daysBetweenLocalDates } from '@/lib/date';
 
 import type {
   HasCheckout,
@@ -129,4 +129,28 @@ export function skipCurrentDay(
 
   const { state: reconciledState, resolvedDays } = reconcileSchedule(advanced, program, today, hasCheckout);
   return { state: reconciledState, resolvedDays: [skippedDay, ...resolvedDays] };
+}
+
+// Optimistic projection for a date at/after the current pending day — the
+// only way to guess a future date's position before it's actually reached
+// is to assume no further missed checkouts between now and then (see
+// reconcileSchedule's doc comment on why that's unknowable otherwise).
+// Used for rendering "planned future coverage" (spec/features/schedule.md,
+// item 5 and the calendar heatmap's future-coverage outline), never for
+// state mutation.
+export function projectDay(state: ScheduleState, program: ScheduleProgram, date: string): ScheduleDayInfo | null {
+  if (date < state.pendingSinceDate || date < state.startDate) {
+    return null;
+  }
+  if (state.endDate !== null && date > state.endDate) {
+    return null;
+  }
+  const daysAhead = daysBetweenLocalDates(state.pendingSinceDate, date);
+  const position = nextPositionAfter(state.currentCyclePosition, daysAhead, program.days.length);
+  const type = dayTypeAt(program, position);
+  return { date, position, type, state: 'planned', overdue: false };
+}
+
+function nextPositionAfter(position: number, steps: number, cycleLength: number): number {
+  return (position + steps) % cycleLength;
 }

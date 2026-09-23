@@ -9,12 +9,18 @@ import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
 import { Screen } from '@/components/Screen';
 import { WorkoutCard } from '@/components/WorkoutCard';
-import { deleteWorkout, duplicateWorkout } from '@/data/sqlite/repositories/workoutRepository';
+import {
+  deleteWorkout,
+  duplicateWorkout,
+  findProgramsReferencingWorkout,
+} from '@/data/sqlite/repositories/workoutRepository';
 import type { SupportedLanguage } from '@/i18n';
 import { pickLocalized } from '@/i18n/localizedText';
 import { theme } from '@/lib/theme';
 
 import { useWorkouts } from '../hooks/useWorkouts';
+
+type PendingDelete = { id: string; message: string };
 
 export function WorkoutList() {
   const { t, i18n } = useTranslation();
@@ -22,19 +28,36 @@ export function WorkoutList() {
   const router = useRouter();
   const db = useSQLiteContext();
   const { workouts, loading, refetch } = useWorkouts();
-  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
 
   async function handleDuplicate(id: string, name: string) {
     await duplicateWorkout(db, id, `${name} (${t('workouts.newWorkout')})`);
     await refetch();
   }
 
-  async function handleConfirmDelete() {
-    if (!pendingDeleteId) {
+  // spec/features/workout.md, "Deleting a Workout referenced by Programs":
+  // list which Programs use it, and warn explicitly if any has an active
+  // schedule — deleteWorkout() itself turns those days into Rest Days.
+  async function handleRequestDelete(id: string) {
+    const references = await findProgramsReferencingWorkout(db, id);
+    if (references.length === 0) {
+      setPendingDelete({ id, message: t('workouts.deleteMessage') });
       return;
     }
-    await deleteWorkout(db, pendingDeleteId);
-    setPendingDeleteId(null);
+    const programNames = references.map((reference) => reference.programName).join(', ');
+    const hasActiveSchedule = references.some((reference) => reference.hasActiveSchedule);
+    const message = hasActiveSchedule
+      ? t('workouts.deleteReferencedActiveScheduleMessage', { programs: programNames })
+      : t('workouts.deleteReferencedMessage', { programs: programNames });
+    setPendingDelete({ id, message });
+  }
+
+  async function handleConfirmDelete() {
+    if (!pendingDelete) {
+      return;
+    }
+    await deleteWorkout(db, pendingDelete.id);
+    setPendingDelete(null);
     await refetch();
   }
 
@@ -68,21 +91,21 @@ export function WorkoutList() {
               iconVariant="workout"
               onPress={() => router.push(`/workout/${item.id}`)}
               onDuplicate={() => handleDuplicate(item.id, item.name)}
-              onDelete={() => setPendingDeleteId(item.id)}
+              onDelete={() => void handleRequestDelete(item.id)}
             />
           )}
         />
       )}
 
       <ConfirmationModal
-        visible={pendingDeleteId !== null}
+        visible={pendingDelete !== null}
         title={t('workouts.deleteTitle')}
-        message={t('workouts.deleteMessage')}
+        message={pendingDelete?.message}
         confirmLabel={t('common.delete')}
         cancelLabel={t('common.cancel')}
         destructive
         onConfirm={handleConfirmDelete}
-        onCancel={() => setPendingDeleteId(null)}
+        onCancel={() => setPendingDelete(null)}
       />
     </Screen>
   );

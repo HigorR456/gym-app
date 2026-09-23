@@ -17,7 +17,9 @@
   "common": {
     "cancel": "Abbrechen",
     "delete": "Löschen",
-    "save": "Speichern"
+    "save": "Speichern",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "workouts": {
     "empty": "Noch keine Workouts. Erstelle dein erstes.",
@@ -30,7 +32,9 @@
     "noExercises": "Noch keine Übungen hinzugefügt.",
     "addSet": "Satz hinzufügen",
     "deleteTitle": "Workout löschen?",
-    "deleteMessage": "Dies kann nicht rückgängig gemacht werden."
+    "deleteMessage": "Dies kann nicht rückgängig gemacht werden.",
+    "deleteReferencedMessage": "Verwendet in: {{programs}}. Diese Tage werden zu Ruhetagen. Dies kann nicht rückgängig gemacht werden.",
+    "deleteReferencedActiveScheduleMessage": "Verwendet in: {{programs}}, einschließlich eines Programms mit aktivem Zeitplan. Diese Tage werden zu Ruhetagen. Dies kann nicht rückgängig gemacht werden."
   },
   "programs": {
     "empty": "Noch keine Programme. Erstelle dein erstes.",
@@ -50,8 +54,34 @@
     "markAsRest": "Als Ruhetag markieren",
     "deleteTitle": "Programm löschen?",
     "deleteMessage": "Dies kann nicht rückgängig gemacht werden.",
+    "deleteActiveScheduleMessage": "Dieses Programm hat einen aktiven Zeitplan — beim Löschen wird dieser ebenfalls beendet. Dies kann nicht rückgängig gemacht werden.",
     "duplicateTitle": "Programm duplizieren",
     "duplicateOption": "Programm duplizieren",
-    "duplicateWithWorkoutsOption": "Programm und Workouts duplizieren"
+    "duplicateWithWorkoutsOption": "Programm und Workouts duplizieren",
+    "activeScheduleEditTitle": "Aktiver Zeitplan verknüpft",
+    "activeScheduleEditMessage": "Dieses Programm hat einen aktiven Zeitplan. Das Ändern der Tage kann ihn beeinflussen."
+  },
+  "schedule": {
+    "empty": "Kein aktiver Zeitplan. Wähle ein Programm, um einen zu starten.",
+    "chooseProgram": "Programm wählen",
+    "activeScheduleExists": "Es existiert bereits ein aktiver Zeitplan. Beende oder lösche ihn, bevor du einen neuen erstellst.",
+    "startDayLabel": "Start an Tag",
+    "startDateLabel": "Startdatum",
+    "continuousLabel": "Fortlaufend (kein Enddatum)",
+    "endDateLabel": "Enddatum",
+    "createAction": "Zeitplan erstellen",
+    "changeEndDate": "Enddatum ändern",
+    "deleteSchedule": "Zeitplan löschen",
+    "deleteTitle": "Zeitplan löschen?",
+    "deleteMessage": "Dies beendet den aktiven Zeitplan. Der Sitzungsverlauf bleibt erhalten.",
+    "skipDay": "Tag überspringen",
+    "restDayToday": "Ruhetag",
+    "plannedWorkout": "Geplant",
+    "pendingWorkout": "Ausstehend",
+    "overdueWorkout": "Überfällig",
+    "legendMultiple": "Mehrere Einheiten",
+    "legendOne": "1 Einheit",
+    "legendRest": "Ruhetag",
+    "legendNone": "Keine Aktivität"
   }
 }

@@ -4,14 +4,17 @@ import '@/i18n';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import { useScheduleReconciliation } from '@/features/schedule/hooks/useScheduleReconciliation';
 import { useLanguagePreference } from '@/i18n/useLanguagePreference';
 import { theme } from '@/lib/theme';
 import { AppProviders } from '@/providers/AppProviders';
 
 // Descendant of AppProviders (not RootLayout itself) so useLanguagePreference
-// can reach the SQLite context set up inside AppProviders.
+// and useScheduleReconciliation can reach the SQLite context set up inside
+// AppProviders.
 function AppContent() {
   useLanguagePreference();
+  useScheduleReconciliation();
 
   return (
     <>

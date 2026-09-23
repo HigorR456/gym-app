@@ -1,4 +1,4 @@
-export { createScheduleState, describeCurrentDay, reconcileSchedule, skipCurrentDay } from './cycle';
+export { createScheduleState, describeCurrentDay, projectDay, reconcileSchedule, skipCurrentDay } from './cycle';
 export type {
   HasCheckout,
   ProgramDayType,

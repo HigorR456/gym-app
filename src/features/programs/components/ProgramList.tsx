@@ -14,17 +14,20 @@ import {
   duplicateProgram,
   duplicateProgramWithWorkouts,
 } from '@/data/sqlite/repositories/programRepository';
+import { findActiveScheduleForProgram } from '@/data/sqlite/repositories/scheduleRepository';
 import { theme } from '@/lib/theme';
 
 import { usePrograms } from '../hooks/usePrograms';
 import { DuplicateProgramModal } from './DuplicateProgramModal';
+
+type PendingDelete = { id: string; message: string };
 
 export function ProgramList() {
   const { t } = useTranslation();
   const router = useRouter();
   const db = useSQLiteContext();
   const { programs, loading, refetch } = usePrograms();
-  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [duplicateTarget, setDuplicateTarget] = useState<{ id: string; name: string } | null>(null);
 
   async function handleDuplicate() {
@@ -49,12 +52,21 @@ export function ProgramList() {
     await refetch();
   }
 
+  // spec/features/program.md, "Editing/deleting a Program with an active
+  // schedule": always warn when one is linked — deleteProgram() itself
+  // archives that schedule before deleting the Program.
+  async function handleRequestDelete(id: string) {
+    const activeSchedule = await findActiveScheduleForProgram(db, id);
+    const message = activeSchedule ? t('programs.deleteActiveScheduleMessage') : t('programs.deleteMessage');
+    setPendingDelete({ id, message });
+  }
+
   async function handleConfirmDelete() {
-    if (!pendingDeleteId) {
+    if (!pendingDelete) {
       return;
     }
-    await deleteProgram(db, pendingDeleteId);
-    setPendingDeleteId(null);
+    await deleteProgram(db, pendingDelete.id);
+    setPendingDelete(null);
     await refetch();
   }
 
@@ -83,7 +95,7 @@ export function ProgramList() {
               iconVariant="program"
               onPress={() => router.push(`/program/${item.id}`)}
               onDuplicate={() => setDuplicateTarget({ id: item.id, name: item.name })}
-              onDelete={() => setPendingDeleteId(item.id)}
+              onDelete={() => void handleRequestDelete(item.id)}
             />
           )}
         />
@@ -97,14 +109,14 @@ export function ProgramList() {
       />
 
       <ConfirmationModal
-        visible={pendingDeleteId !== null}
+        visible={pendingDelete !== null}
         title={t('programs.deleteTitle')}
-        message={t('programs.deleteMessage')}
+        message={pendingDelete?.message}
         confirmLabel={t('common.delete')}
         cancelLabel={t('common.cancel')}
         destructive
         onConfirm={handleConfirmDelete}
-        onCancel={() => setPendingDeleteId(null)}
+        onCancel={() => setPendingDelete(null)}
       />
     </Screen>
   );

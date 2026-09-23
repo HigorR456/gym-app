@@ -217,12 +217,47 @@ export async function updateWorkout(db: SQLiteDatabase, id: string, input: Worko
   });
 }
 
-// No check against Program references yet — deferred to
-// implementation-roadmap.md step 11, once Programs exist (step 9) and the
-// scheduling engine (step 10) does. See spec/features/workout.md, "Deleting
-// a Workout referenced by Programs".
+export type WorkoutProgramReference = {
+  programId: string;
+  programName: string;
+  hasActiveSchedule: boolean;
+};
+
+// Which Programs (if any) reference this Workout in one of their days, and
+// whether any of them currently has an active schedule — for the
+// confirmation popup before deleting (spec/features/workout.md, "Deleting a
+// Workout referenced by Programs").
+export async function findProgramsReferencingWorkout(
+  db: SQLiteDatabase,
+  workoutId: string,
+): Promise<WorkoutProgramReference[]> {
+  const rows = await db.getAllAsync<{ program_id: string; program_name: string; active_schedule_id: string | null }>(
+    `SELECT DISTINCT p.id as program_id, p.name as program_name, sp.id as active_schedule_id
+     FROM program_days pd
+     JOIN programs p ON p.id = pd.program_id
+     LEFT JOIN scheduled_programs sp ON sp.program_id = p.id AND sp.status = 'active'
+     WHERE pd.workout_id = ?`,
+    workoutId,
+  );
+  return rows.map((row) => ({
+    programId: row.program_id,
+    programName: row.program_name,
+    hasActiveSchedule: row.active_schedule_id !== null,
+  }));
+}
+
+// Every Program day referencing this Workout becomes a Rest Day first (spec/
+// features/workout.md, "On confirming the deletion, every Program day that
+// referenced the deleted Workout automatically becomes a Rest Day"). The FK
+// from program_days.workout_id to workouts is intentionally no-action (see
+// spec/technical/database-schema.md) specifically so a raw delete that
+// skipped this step would fail loudly instead of silently corrupting state
+// — this is the app-level step it's waiting for.
 export async function deleteWorkout(db: SQLiteDatabase, id: string): Promise<void> {
-  await db.runAsync('DELETE FROM workouts WHERE id = ?', id);
+  await db.withTransactionAsync(async () => {
+    await db.runAsync('UPDATE program_days SET workout_id = NULL, updated_at = ? WHERE workout_id = ?', nowIso(), id);
+    await db.runAsync('DELETE FROM workouts WHERE id = ?', id);
+  });
 }
 
 export async function duplicateWorkout(db: SQLiteDatabase, id: string, newName: string): Promise<string> {

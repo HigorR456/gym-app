@@ -21,3 +21,11 @@ export function addDaysToLocalDate(date: string, days: number): string {
   const [year, month, day] = date.split('-').map(Number);
   return toLocalDateString(new Date(year, month - 1, day + days));
 }
+
+export function daysBetweenLocalDates(from: string, to: string): number {
+  const [fy, fm, fd] = from.split('-').map(Number);
+  const [ty, tm, td] = to.split('-').map(Number);
+  const fromMs = new Date(fy, fm - 1, fd).getTime();
+  const toMs = new Date(ty, tm - 1, td).getTime();
+  return Math.round((toMs - fromMs) / 86_400_000);
+}

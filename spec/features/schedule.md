@@ -6,7 +6,17 @@
 
 The cycle model, automatic slide, manual skip, and day states described below are implemented as pure functions in `src/domain/schedule/` (`cycle.ts`, `types.ts`) — no SQLite, no React, per [Architecture](../technical/architecture.md), "Domain layer: pure functions first". `reconcileSchedule` is the core: given a `ScheduleState`, the `Program`'s day types, today's date, and a `hasCheckout` lookup, it walks forward resolving whatever can be resolved and stops at the first unresolved pending workout day — that stall *is* the automatic slide (see "Automatic reschedule on missed checkout" below), not a separate mechanism bolted on top. `skipCurrentDay` forces that one day to resolve as `'skipped'` instead, then continues reconciling. `describeCurrentDay` reads off the always-current pending/rest/planned day without re-walking anything.
 
-This step deliberately stops short of the Schedule screen's calendar (step 11): a repository to load/persist `ScheduleState` from `scheduled_programs`, the `ScheduleProgramForm` component, and a date→day-type projection for rendering *future* planned days are not built yet.
+## Implementation notes (Schedule screen UI, step 11)
+
+`src/data/sqlite/repositories/scheduleRepository.ts` loads/persists `ScheduleState` from `scheduled_programs` and bridges it to the pure engine: `reconcileActiveSchedule` (run on app open/resume via `useScheduleReconciliation`, and again whenever `useActiveSchedule` refetches on focus), `skipActiveScheduleDay`, `createSchedule` (throws if one is already active — "Only one active schedule"), `updateScheduleEndDate` (auto-archives when the new end date is in the past — one of the three ways a schedule ends), `endSchedule` (the explicit delete action — archives, never hard-deletes, so history survives), and `realignScheduleToNewDayCount`.
+
+Two engine-adjacent pieces exist only in the repository/domain layer, not as their own spec section, since they're implementation detail in service of requirements above:
+- `computeScheduleHistory` re-walks from `start_date` (a fresh `ScheduleState`, never persisted) to reconstruct the full past resolution log — `ScheduleState` on its own only remembers the current pointer, so this is what "preserve the history... even when the cycle slides" (see "States") actually means in practice.
+- `projectDay` (domain layer) is the optimistic forward projection for dates after the current pending day, assuming no further missed checkouts — the only way to render "future coverage" (item 5, and the heatmap's yellow outline) before those days are actually reached.
+
+`ScheduleCalendar` is a plain custom month grid (no calendar library) combining real session counts (`findSessionCountsByDate`, independent of the plan) with the history/current/projected day types above to pick each cell's fill, per "Calendar heatmap" below. `ScheduleProgramForm` covers Program/start-day/start-date/end-date entry via plain list/text inputs rather than a dedicated calendar date-picker widget — sufficient for the spec's requirements, not a deliberate long-term choice.
+
+Not built in this step: editing the schedule's start day/date after creation (see "Editing the schedule's start" below) — creation-only for now, since that edit is only ever valid in a narrow same-day window before any checkout.
 
 The **Schedule** screen presents a calendar.
 

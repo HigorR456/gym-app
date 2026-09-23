@@ -11,7 +11,11 @@ module.exports = {
           100: '#262626',
           200: '#404040',
         },
-        primary: '#FACC15',
+        primary: {
+          DEFAULT: '#FACC15',
+          light: '#FEF08A',
+          dark: '#CA8A04',
+        },
         text: '#FFFFFF',
         textMuted: '#737373',
       },

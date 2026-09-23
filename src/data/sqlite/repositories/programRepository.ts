@@ -152,12 +152,21 @@ export async function updateProgram(db: SQLiteDatabase, id: string, input: Progr
   });
 }
 
-// No check against an active schedule yet — deferred to
-// implementation-roadmap.md step 11, once the scheduling engine (step 10)
-// exists. See spec/features/program.md, "Editing/deleting a Program with an
-// active schedule".
+// Archives any active schedule for this Program first (spec/features/
+// program.md, "Deleting a Program with an active schedule also ends the
+// corresponding schedule"). The DELETE itself then always succeeds even if
+// this Program was ever scheduled — scheduled_programs.program_id uses
+// ON DELETE SET NULL specifically so a past schedule's history survives its
+// Program being deleted (see spec/technical/database-schema.md).
 export async function deleteProgram(db: SQLiteDatabase, id: string): Promise<void> {
-  await db.runAsync('DELETE FROM programs WHERE id = ?', id);
+  await db.withTransactionAsync(async () => {
+    await db.runAsync(
+      "UPDATE scheduled_programs SET status = 'archived', updated_at = ? WHERE program_id = ? AND status = 'active'",
+      nowIso(),
+      id,
+    );
+    await db.runAsync('DELETE FROM programs WHERE id = ?', id);
+  });
 }
 
 // "Duplicate program" (spec/features/program.md) — the preferred, emphasized

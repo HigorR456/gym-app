@@ -17,7 +17,9 @@
   "common": {
     "cancel": "Cancel",
     "delete": "Delete",
-    "save": "Save"
+    "save": "Save",
+    "yes": "Yes",
+    "no": "No"
   },
   "workouts": {
     "empty": "No workouts yet. Create your first one.",
@@ -30,7 +32,9 @@
     "noExercises": "No exercises added yet.",
     "addSet": "Add set",
     "deleteTitle": "Delete workout?",
-    "deleteMessage": "This can't be undone."
+    "deleteMessage": "This can't be undone.",
+    "deleteReferencedMessage": "Used in: {{programs}}. Those days will become Rest Days. This can't be undone.",
+    "deleteReferencedActiveScheduleMessage": "Used in: {{programs}}, including a program with an active schedule. Those days will become Rest Days. This can't be undone."
   },
   "programs": {
     "empty": "No programs yet. Create your first one.",
@@ -50,8 +54,34 @@
     "markAsRest": "Mark as rest",
     "deleteTitle": "Delete program?",
     "deleteMessage": "This can't be undone.",
+    "deleteActiveScheduleMessage": "This program has an active schedule — deleting it will also end that schedule. This can't be undone.",
     "duplicateTitle": "Duplicate program",
     "duplicateOption": "Duplicate program",
-    "duplicateWithWorkoutsOption": "Duplicate program and Workouts too"
+    "duplicateWithWorkoutsOption": "Duplicate program and Workouts too",
+    "activeScheduleEditTitle": "Active schedule linked",
+    "activeScheduleEditMessage": "This program has an active schedule. Changing its days may affect it."
+  },
+  "schedule": {
+    "empty": "No active schedule. Choose a Program to start one.",
+    "chooseProgram": "Choose Program",
+    "activeScheduleExists": "An active schedule already exists. End or delete it before creating a new one.",
+    "startDayLabel": "Start on day",
+    "startDateLabel": "Start date",
+    "continuousLabel": "Continuous (no end date)",
+    "endDateLabel": "End date",
+    "createAction": "Create schedule",
+    "changeEndDate": "Change end date",
+    "deleteSchedule": "Delete schedule",
+    "deleteTitle": "Delete schedule?",
+    "deleteMessage": "This ends the active schedule. Session history is kept.",
+    "skipDay": "Skip day",
+    "restDayToday": "Rest day",
+    "plannedWorkout": "Planned",
+    "pendingWorkout": "Pending",
+    "overdueWorkout": "Overdue",
+    "legendMultiple": "Multiple sessions",
+    "legendOne": "1 session",
+    "legendRest": "Rest day",
+    "legendNone": "No activity"
   }
 }
