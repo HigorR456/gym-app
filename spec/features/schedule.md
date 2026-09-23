@@ -2,6 +2,12 @@
 
 > This is the most complex feature in the app. Read this file in full before touching scheduling logic.
 
+## Implementation notes (scheduling engine, step 10)
+
+The cycle model, automatic slide, manual skip, and day states described below are implemented as pure functions in `src/domain/schedule/` (`cycle.ts`, `types.ts`) — no SQLite, no React, per [Architecture](../technical/architecture.md), "Domain layer: pure functions first". `reconcileSchedule` is the core: given a `ScheduleState`, the `Program`'s day types, today's date, and a `hasCheckout` lookup, it walks forward resolving whatever can be resolved and stops at the first unresolved pending workout day — that stall *is* the automatic slide (see "Automatic reschedule on missed checkout" below), not a separate mechanism bolted on top. `skipCurrentDay` forces that one day to resolve as `'skipped'` instead, then continues reconciling. `describeCurrentDay` reads off the always-current pending/rest/planned day without re-walking anything.
+
+This step deliberately stops short of the Schedule screen's calendar (step 11): a repository to load/persist `ScheduleState` from `scheduled_programs`, the `ScheduleProgramForm` component, and a date→day-type projection for rendering *future* planned days are not built yet.
+
 The **Schedule** screen presents a calendar.
 
 The user must be able to:
