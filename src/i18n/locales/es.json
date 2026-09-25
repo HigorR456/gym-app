@@ -107,6 +107,11 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "addExercise": "Añadir ejercicio",
-    "noExercises": "Aún no hay ejercicios. Añade uno para empezar."
+    "noExercises": "Aún no hay ejercicios. Añade uno para empezar.",
+    "restLabel": "Descanso",
+    "restOver": "Descanso terminado",
+    "skipRest": "Saltar",
+    "addTenSeconds": "+10s",
+    "subtractTenSeconds": "-10s"
   }
 }

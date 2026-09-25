@@ -107,6 +107,11 @@
     "previous": "Previous",
     "next": "Next",
     "addExercise": "Add exercise",
-    "noExercises": "No exercises yet. Add one to get started."
+    "noExercises": "No exercises yet. Add one to get started.",
+    "restLabel": "Rest",
+    "restOver": "Rest over",
+    "skipRest": "Skip",
+    "addTenSeconds": "+10s",
+    "subtractTenSeconds": "-10s"
   }
 }

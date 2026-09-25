@@ -7,8 +7,10 @@ import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
 import { ExerciseImage } from '@/components/ExerciseImage';
+import { RestTimer } from '@/components/RestTimer';
 import { Screen } from '@/components/Screen';
 import { SetRow } from '@/components/SetRow';
+import { Timer } from '@/components/Timer';
 import { ExerciseCatalog } from '@/features/exercises/components/ExerciseCatalog';
 import type { SupportedLanguage } from '@/i18n';
 import { pickLocalized } from '@/i18n/localizedText';
@@ -51,6 +53,7 @@ export function SessionScreen({ sessionId }: Props) {
     addExercise,
     finish,
     discard,
+    restTimer,
   } = useSessionExecution(sessionId);
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [confirmFinish, setConfirmFinish] = useState(false);
@@ -81,9 +84,12 @@ export function SessionScreen({ sessionId }: Props) {
         <Pressable onPress={() => setConfirmDiscard(true)}>
           <Text className="text-textMuted text-sm">{t('session.discardAction')}</Text>
         </Pressable>
-        <Text className="text-text text-base font-medium">
-          {total > 0 ? t('session.exerciseCounter', { current: exerciseIndex + 1, total }) : ''}
-        </Text>
+        <View className="items-center">
+          <Text className="text-text text-base font-medium">
+            {total > 0 ? t('session.exerciseCounter', { current: exerciseIndex + 1, total }) : ''}
+          </Text>
+          <Timer startedAt={session.startedAt} className="text-textMuted text-xs mt-0.5" />
+        </View>
         <Pressable onPress={() => setConfirmFinish(true)} className="rounded-lg bg-primary px-3 py-2">
           <Text className="text-background font-semibold text-sm">{t('session.finishWorkout')}</Text>
         </Pressable>
@@ -129,6 +135,16 @@ export function SessionScreen({ sessionId }: Props) {
           <Text className="text-primary font-medium">{t('session.addExercise')}</Text>
         </Pressable>
       </View>
+
+      {restTimer.active ? (
+        <RestTimer
+          remainingSeconds={restTimer.remainingSeconds}
+          isOver={restTimer.isOver}
+          onAdd10={() => restTimer.addSeconds(10)}
+          onSubtract10={() => restTimer.addSeconds(-10)}
+          onSkip={restTimer.dismiss}
+        />
+      ) : null}
 
       <View className="flex-row border-t border-surface-100">
         <Pressable disabled={exerciseIndex === 0} onPress={goPrevious} className="flex-1 items-center py-4">

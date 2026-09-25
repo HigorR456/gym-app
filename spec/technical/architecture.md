@@ -272,8 +272,8 @@ Build reusable components for recurring elements, including:
 - `ExerciseCard`
 - `WorkoutCard`
 - `SetRow`
-- `Timer`
-- `RestTimer`
+- `Timer` — the session-wide elapsed-time readout (step 14, see [Workout Execution](../features/workout-execution.md))
+- `RestTimer` — the per-set rest countdown popup (step 14, see [Workout Execution](../features/workout-execution.md)). Both `Timer` and `RestTimer` are purely presentational, ticking via the shared `lib/useNowTick.ts` hook; the rest timer's own start/+10/-10/dismiss state lives in `features/session/hooks/useRestTimer.ts`
 - `ConfirmationModal`
 - `ExerciseImage`
 - `EmptyState`

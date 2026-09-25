@@ -107,6 +107,11 @@
     "previous": "Zurück",
     "next": "Weiter",
     "addExercise": "Übung hinzufügen",
-    "noExercises": "Noch keine Übungen. Füge eine hinzu, um zu starten."
+    "noExercises": "Noch keine Übungen. Füge eine hinzu, um zu starten.",
+    "restLabel": "Pause",
+    "restOver": "Pause vorbei",
+    "skipRest": "Überspringen",
+    "addTenSeconds": "+10s",
+    "subtractTenSeconds": "-10s"
   }
 }

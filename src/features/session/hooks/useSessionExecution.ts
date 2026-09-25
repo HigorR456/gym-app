@@ -14,6 +14,8 @@ import {
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionSet, WorkoutSession } from '@/features/session/types';
 
+import { useRestTimer } from './useRestTimer';
+
 // Loads a session and keeps local state in sync with the write-through
 // persistence in sessionRepository.ts — every mutator below updates SQLite
 // first (so nothing is lost if the app backgrounds mid-session, spec/
@@ -24,6 +26,7 @@ export function useSessionExecution(sessionId: string) {
   const [session, setSession] = useState<WorkoutSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [exerciseIndex, setExerciseIndex] = useState(0);
+  const restTimer = useRestTimer();
 
   useEffect(() => {
     let cancelled = false;
@@ -93,6 +96,14 @@ export function useSessionExecution(sessionId: string) {
         : prev,
     );
     await setSessionSetCompleted(db, setId, completed);
+
+    // "Start the rest timer configured for that set" (spec/features/
+    // workout-execution.md, "Sets") — only on the completing transition
+    // (not un-completing), and only when the set actually has a configured
+    // rest duration to count down from.
+    if (completed && set.restSeconds !== null && set.restSeconds > 0) {
+      restTimer.start(set.restSeconds);
+    }
   }
 
   async function addSet(sessionExerciseId: string) {
@@ -154,5 +165,6 @@ export function useSessionExecution(sessionId: string) {
     addExercise,
     finish,
     discard,
+    restTimer,
   };
 }
