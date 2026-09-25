@@ -16,8 +16,8 @@ import {
 import { todayLocalDate } from '@/lib/date';
 import { theme } from '@/lib/theme';
 
+import { ScheduleCalendar } from '../components/ScheduleCalendar';
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
-import { ScheduleCalendar } from './ScheduleCalendar';
 
 export function ScheduleScreen() {
   const { t } = useTranslation();

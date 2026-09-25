@@ -1,5 +1,5 @@
-import { WorkoutList } from '@/features/workouts/components/WorkoutList';
+import { WorkoutScreen } from '@/features/workouts/screen/WorkoutScreen';
 
-export default function WorkoutScreen() {
-  return <WorkoutList />;
+export default function WorkoutTab() {
+  return <WorkoutScreen />;
 }

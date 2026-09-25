@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
@@ -18,11 +18,11 @@ import { findActiveScheduleForProgram } from '@/data/sqlite/repositories/schedul
 import { theme } from '@/lib/theme';
 
 import { usePrograms } from '../hooks/usePrograms';
-import { DuplicateProgramModal } from './DuplicateProgramModal';
+import { DuplicateProgramModal } from '../components/DuplicateProgramModal';
 
 type PendingDelete = { id: string; message: string };
 
-export function ProgramList() {
+export function ProgramScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const db = useSQLiteContext();
@@ -72,7 +72,8 @@ export function ProgramList() {
 
   return (
     <Screen className="flex-1 bg-background">
-      <View className="flex-row items-center justify-end px-4 pt-4 pb-2">
+      <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
+        <Text className="text-text text-xl font-semibold">{t('tabs.program')}</Text>
         <Pressable
           onPress={() => router.push('/program/new')}
           className="flex-row items-center gap-2 rounded-lg bg-primary px-3 py-2"

@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSQLiteContext } from 'expo-sqlite';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
@@ -22,7 +22,7 @@ import { useWorkouts } from '../hooks/useWorkouts';
 
 type PendingDelete = { id: string; message: string };
 
-export function WorkoutList() {
+export function WorkoutScreen() {
   const { t, i18n } = useTranslation();
   const language = i18n.language as SupportedLanguage;
   const router = useRouter();
@@ -63,7 +63,8 @@ export function WorkoutList() {
 
   return (
     <Screen className="flex-1 bg-background">
-      <View className="flex-row items-center justify-end px-4 pt-4 pb-2">
+      <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
+        <Text className="text-text text-xl font-semibold">{t('tabs.workout')}</Text>
         <Pressable
           onPress={() => router.push('/workout/new')}
           className="flex-row items-center gap-2 rounded-lg bg-primary px-3 py-2"

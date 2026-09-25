@@ -1,4 +1,4 @@
-import { ScheduleScreen } from '@/features/schedule/components/ScheduleScreen';
+import { ScheduleScreen } from '@/features/schedule/screen/ScheduleScreen';
 
 export default function ScheduleTab() {
   return <ScheduleScreen />;

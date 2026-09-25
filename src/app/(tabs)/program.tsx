@@ -1,5 +1,5 @@
-import { ProgramList } from '@/features/programs/components/ProgramList';
+import { ProgramScreen } from '@/features/programs/screen/ProgramScreen';
 
-export default function ProgramScreen() {
-  return <ProgramList />;
+export default function ProgramTab() {
+  return <ProgramScreen />;
 }

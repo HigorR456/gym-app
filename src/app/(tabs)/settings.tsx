@@ -4,7 +4,7 @@ import { Text } from 'react-native';
 import { Screen } from '@/components/Screen';
 
 // Placeholder — real content lands in implementation-roadmap.md step 17 (Settings/About).
-export default function SettingsScreen() {
+export default function SettingsTab() {
   const { t } = useTranslation();
 
   return (

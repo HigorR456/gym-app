@@ -1,5 +1,5 @@
-import { StartScreen } from '@/features/start/components/StartScreen';
+import { StartScreen } from '@/features/start/screen/StartScreen';
 
-export default function StartRoute() {
+export default function StartTab() {
   return <StartScreen />;
 }
