@@ -112,6 +112,10 @@
     "restOver": "Pause vorbei",
     "skipRest": "Überspringen",
     "addTenSeconds": "+10s",
-    "subtractTenSeconds": "-10s"
+    "subtractTenSeconds": "-10s",
+    "recoveryTitle": "Workout fortsetzen?",
+    "recoveryMessageNamed": "{{workoutName}} läuft seit {{duration}}.",
+    "recoveryMessageGeneric": "Ein Workout läuft seit {{duration}}.",
+    "resumeAction": "Fortsetzen"
   }
 }

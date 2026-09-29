@@ -112,6 +112,10 @@
     "restOver": "Descanso terminado",
     "skipRest": "Saltar",
     "addTenSeconds": "+10s",
-    "subtractTenSeconds": "-10s"
+    "subtractTenSeconds": "-10s",
+    "recoveryTitle": "¿Reanudar entrenamiento?",
+    "recoveryMessageNamed": "{{workoutName}} lleva en curso {{duration}}.",
+    "recoveryMessageGeneric": "Hay un entrenamiento en curso desde hace {{duration}}.",
+    "resumeAction": "Reanudar"
   }
 }

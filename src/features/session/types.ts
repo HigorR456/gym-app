@@ -34,3 +34,14 @@ export type WorkoutSession = {
   endedAt: string | null;
   exercises: SessionExercise[];
 };
+
+// Lightweight shape for the boot-time recovery prompt (spec/features/
+// workout-execution.md, "Resuming or discarding an in-progress session") —
+// avoids loading every exercise/set just to ask "resume this?". workoutName
+// is null if the Workout it started from was since deleted (workout_id is
+// ON DELETE SET NULL, see spec/technical/database-schema.md).
+export type InProgressSessionSummary = {
+  id: string;
+  workoutName: string | null;
+  startedAt: string;
+};

@@ -7,6 +7,16 @@
 One thing stayed out of scope for this step, on purpose:
 - **Boot-time recovery.** Nothing yet offers to resume an `in_progress` session when the app reopens — that's step 15. The session is already safely persisted by then (see above), so step 15 only has to add the "offer to resume" UI on top, not change how sessions are written.
 
+## Implementation notes (step 15, session persistence/recovery)
+
+`useSessionRecovery` (`src/features/session/hooks/`) is the second of the two independent app-bootstrap checks (see [Architecture](../technical/architecture.md), "App bootstrap") — it mirrors `useScheduleReconciliation`'s cold-start + `AppState` foreground pattern exactly, but returns state instead of silently reconciling, since "offer to resume" needs a UI to act on. `sessionRepository.findInProgressSession` is a lightweight summary query (workout name + `started_at`, not the full nested session) since the prompt only needs to ask the question — `findSessionById` still does the real loading once Resume is tapped, same as any other navigation to `/session/[sessionId]`.
+
+`SessionRecoveryPrompt`, mounted once at the app root next to the schedule reconciliation check, reuses `ConfirmationModal` for both the prompt and the "explicit discard session action (with a confirmation popup)" this section requires — the prompt itself doubles as that confirmation, so discarding from here doesn't open a second popup on top of it.
+
+The recovery check is skipped while the current route is already `/session/*` — the point is to catch a session left `in_progress` from *before* this app open (a kill, a crash), not to interrupt the one already being resumed or actively run right now, which would otherwise happen every time `AppState` cycles background/foreground while the user is still on the exercise screen.
+
+Not handled (not described anywhere in this doc, so not assumed): nothing prevents starting a second Workout while one is already `in_progress` — `findInProgressSession` picks the most recently started one if that ever happens. Revisit if starting a new session should first require finishing or discarding the current one.
+
 ## Implementation notes (step 14, Timers)
 
 Both timers are timestamp-based per [Business Rules](../technical/business-rules.md) rule 8 ("avoid sole reliance on `setInterval`"): a `setInterval` only ever forces a re-render (`lib/useNowTick.ts`), and the displayed value is always recomputed from real timestamps on that render — `Timer` from `now - session.started_at`, `RestTimer` from `now - endAt` (`features/session/hooks/useRestTimer.ts`), where `endAt` is a fixed point in time that "+10 sec"/"-10 sec" shift directly. This means a dropped tick (e.g. the app backgrounding, per rule 7) never desyncs either display — the very next tick recomputes the correct value against the live clock. Rule 9 ("independent of each other") falls out naturally: they're two separate hooks with no shared state.

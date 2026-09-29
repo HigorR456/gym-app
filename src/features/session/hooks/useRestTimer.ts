@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 
+import { secondsBetween } from '@/lib/date';
 import { useNowTick } from '@/lib/useNowTick';
 
 export type RestTimerState = {
@@ -32,7 +33,7 @@ export function useRestTimer(): RestTimerState {
 
   const dismiss = useCallback(() => setEndAt(null), []);
 
-  const remainingSeconds = endAt === null ? 0 : Math.max(0, (endAt - now) / 1000);
+  const remainingSeconds = endAt === null ? 0 : Math.max(0, secondsBetween(now, endAt));
 
   return {
     active: endAt !== null,

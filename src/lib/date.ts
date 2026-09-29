@@ -29,3 +29,13 @@ export function daysBetweenLocalDates(from: string, to: string): number {
   const toMs = new Date(ty, tm - 1, td).getTime();
   return Math.round((toMs - fromMs) / 86_400_000);
 }
+
+// Shared timestamp-math primitive for the timer components (spec/technical/
+// architecture.md, "Domain layer: pure functions first": "elapsed/remaining
+// time must be computed from stored timestamps by a shared pure function...
+// not duplicated inside each component") — Timer measures forward from a
+// start instant, RestTimer counts down to an end instant; both are just
+// this same subtraction in milliseconds, converted to seconds.
+export function secondsBetween(fromMs: number, toMs: number): number {
+  return (toMs - fromMs) / 1000;
+}

@@ -1,6 +1,6 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
 
-import type { SessionExercise, SessionSet, WorkoutSession } from '@/features/session/types';
+import type { InProgressSessionSummary, SessionExercise, SessionSet, WorkoutSession } from '@/features/session/types';
 import { nowIso } from '@/lib/datetime';
 import { generateId } from '@/lib/id';
 
@@ -84,6 +84,28 @@ export async function startSession(db: SQLiteDatabase, input: StartSessionInput)
   });
 
   return sessionId;
+}
+
+// "If the app is reopened and there's a session with in_progress status...
+// the app must offer to resume" (spec/features/workout-execution.md,
+// "Resuming or discarding an in-progress session") — a plain summary, not
+// the full nested findSessionById shape, since this only needs to ask the
+// question, not render the exercise screen. Picks the most recent if
+// somehow more than one is in_progress (not a scenario the spec describes
+// or this app currently blocks).
+export async function findInProgressSession(db: SQLiteDatabase): Promise<InProgressSessionSummary | null> {
+  const row = await db.getFirstAsync<{ id: string; workout_name: string | null; started_at: string }>(
+    `SELECT ws.id, w.name as workout_name, ws.started_at
+     FROM workout_sessions ws
+     LEFT JOIN workouts w ON w.id = ws.workout_id
+     WHERE ws.status = 'in_progress'
+     ORDER BY ws.started_at DESC
+     LIMIT 1`,
+  );
+  if (!row) {
+    return null;
+  }
+  return { id: row.id, workoutName: row.workout_name, startedAt: row.started_at };
 }
 
 type SessionExerciseSetRow = ExerciseRow & {

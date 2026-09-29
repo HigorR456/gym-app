@@ -1,5 +1,6 @@
 import { Text, type TextProps } from 'react-native';
 
+import { secondsBetween } from '@/lib/date';
 import { formatDuration } from '@/lib/duration';
 import { useNowTick } from '@/lib/useNowTick';
 
@@ -15,7 +16,7 @@ type Props = TextProps & {
 // accumulates.
 export function Timer({ startedAt, ...rest }: Props) {
   const now = useNowTick();
-  const elapsedSeconds = (now - new Date(startedAt).getTime()) / 1000;
+  const elapsedSeconds = secondsBetween(new Date(startedAt).getTime(), now);
 
   return <Text {...rest}>{formatDuration(elapsedSeconds)}</Text>;
 }

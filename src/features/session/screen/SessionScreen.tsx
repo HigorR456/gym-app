@@ -14,6 +14,7 @@ import { Timer } from '@/components/Timer';
 import { ExerciseCatalog } from '@/features/exercises/components/ExerciseCatalog';
 import type { SupportedLanguage } from '@/i18n';
 import { pickLocalized } from '@/i18n/localizedText';
+import { secondsBetween } from '@/lib/date';
 import { formatDuration } from '@/lib/duration';
 import { theme } from '@/lib/theme';
 
@@ -64,7 +65,7 @@ export function SessionScreen({ sessionId }: Props) {
   }
 
   const completedExerciseCount = exercises.filter((e) => e.sets.length > 0 && e.sets.every((s) => s.completed)).length;
-  const elapsedSeconds = (Date.now() - new Date(session.startedAt).getTime()) / 1000;
+  const elapsedSeconds = secondsBetween(new Date(session.startedAt).getTime(), Date.now());
 
   async function handleFinish() {
     await finish();

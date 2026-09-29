@@ -112,6 +112,10 @@
     "restOver": "Rest over",
     "skipRest": "Skip",
     "addTenSeconds": "+10s",
-    "subtractTenSeconds": "-10s"
+    "subtractTenSeconds": "-10s",
+    "recoveryTitle": "Resume workout?",
+    "recoveryMessageNamed": "{{workoutName}} has been in progress for {{duration}}.",
+    "recoveryMessageGeneric": "A workout has been in progress for {{duration}}.",
+    "resumeAction": "Resume"
   }
 }

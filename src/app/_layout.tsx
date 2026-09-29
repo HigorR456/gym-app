@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 import { useScheduleReconciliation } from '@/features/schedule/hooks/useScheduleReconciliation';
+import { SessionRecoveryPrompt } from '@/features/session/components/SessionRecoveryPrompt';
 import { useLanguagePreference } from '@/i18n/useLanguagePreference';
 import { theme } from '@/lib/theme';
 import { AppProviders } from '@/providers/AppProviders';
@@ -19,6 +20,7 @@ function AppContent() {
   return (
     <>
       <StatusBar style="light" />
+      <SessionRecoveryPrompt />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
