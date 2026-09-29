@@ -57,6 +57,8 @@ Record at least:
 
 Past (ended/deleted) schedules follow the same principle — no dedicated browsing screen in v1, but data must be persisted correctly (see [Schedule](../features/schedule.md)).
 
+"Configured/actual rest" is two distinct values, not one: `session_sets.rest_seconds` is the configured/planned rest (copied from the Workout at session start, editable during execution, like weight/reps/duration); `session_sets.actual_rest_seconds` (added in `0004_session_actual_rest.ts`, step 16) is what the live RestTimer actually measured from start to dismiss, which can diverge from the configured value via "+10 sec"/"-10 sec"/Skip (see [Workout Execution](../features/workout-execution.md), "Rest timer"). Null until that rest period ends, and never set at all for a set with no configured rest to begin with (no rest timer ever starts for it).
+
 ## Implementation notes
 
 - Schema lives in `src/data/sqlite/migrations/`, one file per version (`0001_initial_schema.ts`, ...), run through a small `PRAGMA user_version`-based runner (`src/data/sqlite/migrations/index.ts`) on app start via `SQLiteProvider`'s `onInit` (see [Architecture](architecture.md), "App bootstrap"). Migrations are append-only — never edit one that already shipped.

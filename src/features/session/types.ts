@@ -11,8 +11,17 @@ export type SessionSet = {
   weight: number | null;
   reps: number | null;
   durationSeconds: number | null;
+  // The configured/planned rest, copied from the Workout at session start
+  // and editable during execution (spec/features/workout-execution.md,
+  // "Sets") — distinct from actualRestSeconds below, which is what the live
+  // RestTimer actually measured (spec/technical/database-schema.md,
+  // "Session history": "configured/actual rest").
   restSeconds: number | null;
   completed: boolean;
+  // Null until the rest period following this set is dismissed (see
+  // features/session/hooks/useRestTimer.ts) — never set at all if the set
+  // had no configured rest to begin with, since no rest timer ever starts.
+  actualRestSeconds: number | null;
 };
 
 export type SessionExercise = {

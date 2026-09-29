@@ -118,8 +118,14 @@ export function ExerciseCatalog({ onSelect, addedExerciseIds, onDeselect, onClos
 
       <View>
         <View className="px-4 pt-4 pb-2">
-          <View className="flex-row items-center gap-2 rounded-lg bg-surface-100 px-3">
-            <FontAwesome6 name="magnifying-glass" iconStyle="solid" color={theme.textMuted} size={16} />
+          <View className="flex-row items-center rounded-lg bg-surface-100 px-3">
+            <FontAwesome6
+              name="magnifying-glass"
+              iconStyle="solid"
+              color={theme.textMuted}
+              size={16}
+              style={{ marginRight: 8 }}
+            />
             <TextInput
               value={filters.query ?? ''}
               onChangeText={(query) => setFilters((prev) => ({ ...prev, query: query || undefined }))}
@@ -181,6 +187,7 @@ export function ExerciseCatalog({ onSelect, addedExerciseIds, onDeselect, onClos
 
 
       <FlatList
+        className="flex-1"
         data={exercises}
         keyExtractor={(exercise) => exercise.id}
         renderItem={({ item }) => (

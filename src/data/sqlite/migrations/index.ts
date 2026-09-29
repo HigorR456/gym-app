@@ -3,6 +3,7 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 import { up as up0001 } from './0001_initial_schema';
 import { up as up0002 } from './0002_add_icon_columns';
 import { up as up0003 } from './0003_schedule_engine';
+import { up as up0004 } from './0004_session_actual_rest';
 
 type Migration = {
   version: number;
@@ -16,6 +17,7 @@ const migrations: Migration[] = [
   { version: 1, up: up0001 },
   { version: 2, up: up0002 },
   { version: 3, up: up0003 },
+  { version: 4, up: up0004 },
 ];
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase): Promise<void> {

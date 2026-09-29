@@ -55,6 +55,7 @@ export function SessionScreen({ sessionId }: Props) {
     finish,
     discard,
     restTimer,
+    skipRest,
   } = useSessionExecution(sessionId);
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [confirmFinish, setConfirmFinish] = useState(false);
@@ -97,7 +98,7 @@ export function SessionScreen({ sessionId }: Props) {
       </View>
 
       {currentExercise ? (
-        <ScrollView contentContainerClassName="px-4 pb-4">
+        <ScrollView className="flex-1" contentContainerClassName="px-4 pb-4">
           <View className="items-center">
             <ExerciseImage images={currentExercise.exercise.images} size={180} />
           </View>
@@ -131,8 +132,8 @@ export function SessionScreen({ sessionId }: Props) {
       )}
 
       <View className="px-4 pb-2">
-        <Pressable onPress={() => setCatalogOpen(true)} className="flex-row items-center justify-center gap-2 rounded-lg bg-surface py-3">
-          <FontAwesome6 name="plus" iconStyle="solid" color={theme.primary} size={14} />
+        <Pressable onPress={() => setCatalogOpen(true)} className="flex-row items-center justify-center rounded-lg bg-surface py-3">
+          <FontAwesome6 name="plus" iconStyle="solid" color={theme.primary} size={14} style={{ marginRight: 8 }} />
           <Text className="text-primary font-medium">{t('session.addExercise')}</Text>
         </Pressable>
       </View>
@@ -143,7 +144,7 @@ export function SessionScreen({ sessionId }: Props) {
           isOver={restTimer.isOver}
           onAdd10={() => restTimer.addSeconds(10)}
           onSubtract10={() => restTimer.addSeconds(-10)}
-          onSkip={restTimer.dismiss}
+          onSkip={() => void skipRest()}
         />
       ) : null}
 

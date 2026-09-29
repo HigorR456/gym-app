@@ -17,6 +17,14 @@ The recovery check is skipped while the current route is already `/session/*` �
 
 Not handled (not described anywhere in this doc, so not assumed): nothing prevents starting a second Workout while one is already `in_progress` — `findInProgressSession` picks the most recently started one if that ever happens. Revisit if starting a new session should first require finishing or discarding the current one.
 
+## Implementation notes (step 16, history/session saving)
+
+[Database Schema](../technical/database-schema.md), "Session history" says v1 needs no dedicated History screen, but the data must still be persisted completely — steps 13-15 already cover every field in that section's "Record at least" list except one: **"configured/actual rest"**, which is two values, not one. Auditing that list for step 16 is what surfaced the gap — `session_sets.rest_seconds` only ever held the configured/planned rest; nothing captured what the live RestTimer actually measured, which can differ from it via "+10 sec"/"-10 sec", or by dismissing early/late.
+
+Fixed by adding `session_sets.actual_rest_seconds` (migration `0004_session_actual_rest.ts`) and threading a `{ sessionExerciseId, setId }` context through `useRestTimer` (`start`/`context`/`startedAtMs`) so `useSessionExecution`'s new `skipRest()` — the one place a rest period ever actually ends, whether Skip is tapped before or after zero — can compute `secondsBetween(startedAtMs, Date.now())` (the same shared helper the timers already use) and persist it via `sessionRepository.setSessionSetActualRest`. `SessionScreen` itself didn't need to change beyond calling `skipRest()` in place of `restTimer.dismiss()` directly.
+
+No UI reads `actual_rest_seconds` yet — there's nowhere to show it without a History screen, which remains out of scope. This is purely a persistence-completeness fix, per the "even if the first version has no dedicated History screen, the data must be persisted correctly" line above.
+
 ## Implementation notes (step 14, Timers)
 
 Both timers are timestamp-based per [Business Rules](../technical/business-rules.md) rule 8 ("avoid sole reliance on `setInterval`"): a `setInterval` only ever forces a re-render (`lib/useNowTick.ts`), and the displayed value is always recomputed from real timestamps on that render — `Timer` from `now - session.started_at`, `RestTimer` from `now - endAt` (`features/session/hooks/useRestTimer.ts`), where `endAt` is a fixed point in time that "+10 sec"/"-10 sec" shift directly. This means a dropped tick (e.g. the app backgrounding, per rule 7) never desyncs either display — the very next tick recomputes the correct value against the live clock. Rule 9 ("independent of each other") falls out naturally: they're two separate hooks with no shared state.

@@ -8,11 +8,13 @@ import {
   finishSession,
   findSessionById,
   removeSessionSet,
+  setSessionSetActualRest,
   setSessionSetCompleted,
   updateSessionSet,
 } from '@/data/sqlite/repositories/sessionRepository';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionSet, WorkoutSession } from '@/features/session/types';
+import { secondsBetween } from '@/lib/date';
 
 import { useRestTimer } from './useRestTimer';
 
@@ -102,8 +104,37 @@ export function useSessionExecution(sessionId: string) {
     // (not un-completing), and only when the set actually has a configured
     // rest duration to count down from.
     if (completed && set.restSeconds !== null && set.restSeconds > 0) {
-      restTimer.start(set.restSeconds);
+      restTimer.start(set.restSeconds, { sessionExerciseId, setId });
     }
+  }
+
+  // "Skip" (spec/features/workout-execution.md, "Rest timer") — also the
+  // path taken when the countdown reaches zero and the user dismisses the
+  // resulting "rest over" state (see components/RestTimer.tsx), so this is
+  // the one place a rest period ever actually ends. Records how much time
+  // really passed since restTimer.start(), independent of the configured
+  // duration it started from (spec/technical/database-schema.md, "Session
+  // history": "configured/actual rest").
+  async function skipRest() {
+    const { context, startedAtMs } = restTimer;
+    restTimer.dismiss();
+    if (!context || startedAtMs === null) {
+      return;
+    }
+    const actualRestSeconds = Math.round(secondsBetween(startedAtMs, Date.now()));
+    setSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            exercises: prev.exercises.map((e) =>
+              e.id === context.sessionExerciseId
+                ? { ...e, sets: e.sets.map((s) => (s.id === context.setId ? { ...s, actualRestSeconds } : s)) }
+                : e,
+            ),
+          }
+        : prev,
+    );
+    await setSessionSetActualRest(db, context.setId, actualRestSeconds);
   }
 
   async function addSet(sessionExerciseId: string) {
@@ -166,5 +197,6 @@ export function useSessionExecution(sessionId: string) {
     finish,
     discard,
     restTimer,
+    skipRest,
   };
 }

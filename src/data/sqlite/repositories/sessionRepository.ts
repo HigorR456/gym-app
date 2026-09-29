@@ -118,6 +118,7 @@ type SessionExerciseSetRow = ExerciseRow & {
   ss_duration_seconds: number | null;
   ss_rest_seconds: number | null;
   ss_completed: number | null;
+  ss_actual_rest_seconds: number | null;
 };
 
 export async function findSessionById(db: SQLiteDatabase, id: string): Promise<WorkoutSession | null> {
@@ -144,7 +145,8 @@ export async function findSessionById(db: SQLiteDatabase, id: string): Promise<W
        ex.*,
        ss.id as ss_id, ss.position as ss_position, ss.weight as ss_weight,
        ss.reps as ss_reps, ss.duration_seconds as ss_duration_seconds,
-       ss.rest_seconds as ss_rest_seconds, ss.completed as ss_completed
+       ss.rest_seconds as ss_rest_seconds, ss.completed as ss_completed,
+       ss.actual_rest_seconds as ss_actual_rest_seconds
      FROM session_exercises se
      JOIN exercises ex ON ex.id = se.exercise_id
      LEFT JOIN session_sets ss ON ss.session_exercise_id = se.id
@@ -169,6 +171,7 @@ export async function findSessionById(db: SQLiteDatabase, id: string): Promise<W
         durationSeconds: row.ss_duration_seconds,
         restSeconds: row.ss_rest_seconds,
         completed: row.ss_completed === 1,
+        actualRestSeconds: row.ss_actual_rest_seconds,
       };
       sessionExercise.sets.push(set);
     }
@@ -247,7 +250,21 @@ export async function addSessionSet(
     timestamp,
   );
 
-  return { id, position, weight, reps, durationSeconds, restSeconds, completed: false };
+  return { id, position, weight, reps, durationSeconds, restSeconds, completed: false, actualRestSeconds: null };
+}
+
+// The rest actually taken, measured by the live RestTimer from start to
+// dismiss (see features/session/hooks/useRestTimer.ts) — written once, when
+// that rest period ends, distinct from the configured rest_seconds above
+// (spec/technical/database-schema.md, "Session history": "configured/actual
+// rest").
+export async function setSessionSetActualRest(db: SQLiteDatabase, sessionSetId: string, actualRestSeconds: number): Promise<void> {
+  await db.runAsync(
+    'UPDATE session_sets SET actual_rest_seconds = ?, updated_at = ? WHERE id = ?',
+    actualRestSeconds,
+    nowIso(),
+    sessionSetId,
+  );
 }
 
 export async function removeSessionSet(db: SQLiteDatabase, sessionSetId: string): Promise<void> {
