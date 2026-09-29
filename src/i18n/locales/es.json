@@ -117,5 +117,17 @@
     "recoveryMessageNamed": "{{workoutName}} lleva en curso {{duration}}.",
     "recoveryMessageGeneric": "Hay un entrenamiento en curso desde hace {{duration}}.",
     "resumeAction": "Reanudar"
+  },
+  "settings": {
+    "languageLabel": "Idioma",
+    "language": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch"
+    },
+    "aboutLabel": "Acerca de",
+    "version": "Versión {{version}}",
+    "aboutDescription": "Gym App es un rastreador de entrenamientos local-first — crea Entrenamientos y Programas, prográmalos, y registra series, peso, repeticiones y descanso durante la ejecución, totalmente sin conexión.",
+    "datasetCredit": "El catálogo de ejercicios e imágenes usados en esta app provienen del proyecto exercise-dataset de RepDB."
   }
 }

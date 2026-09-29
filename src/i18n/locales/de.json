@@ -117,5 +117,17 @@
     "recoveryMessageNamed": "{{workoutName}} läuft seit {{duration}}.",
     "recoveryMessageGeneric": "Ein Workout läuft seit {{duration}}.",
     "resumeAction": "Fortsetzen"
+  },
+  "settings": {
+    "languageLabel": "Sprache",
+    "language": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch"
+    },
+    "aboutLabel": "Über",
+    "version": "Version {{version}}",
+    "aboutDescription": "Gym App ist ein lokal-first Workout-Tracker — erstelle Workouts und Programme, plane sie, und verfolge Sätze, Gewicht, Wiederholungen und Pausen während der Ausführung, vollständig offline.",
+    "datasetCredit": "Der Übungskatalog und die Bilder in dieser App stammen aus dem exercise-dataset-Projekt von RepDB."
   }
 }

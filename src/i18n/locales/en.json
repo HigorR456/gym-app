@@ -117,5 +117,17 @@
     "recoveryMessageNamed": "{{workoutName}} has been in progress for {{duration}}.",
     "recoveryMessageGeneric": "A workout has been in progress for {{duration}}.",
     "resumeAction": "Resume"
+  },
+  "settings": {
+    "languageLabel": "Language",
+    "language": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch"
+    },
+    "aboutLabel": "About",
+    "version": "Version {{version}}",
+    "aboutDescription": "Gym App is a local-first workout tracker — create Workouts and Programs, schedule them, and track sets, weight, reps, and rest during execution, fully offline.",
+    "datasetCredit": "The exercise catalog and images used in this app come from RepDB's exercise-dataset project."
   }
 }
