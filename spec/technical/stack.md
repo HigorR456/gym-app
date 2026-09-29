@@ -38,4 +38,10 @@ The theme (black background, dark gray variants, white text, yellow primary) is 
 - `text` — `#FFFFFF`
 - `primary` — `#FACC15`
 
-These exact values are a provisional baseline so the app renders correctly from NativeWind setup onward — not a final design decision. Revisit during UX refinement ([implementation-roadmap.md](../process/implementation-roadmap.md), step 18) if real brand/design input changes them; if it does, only `tailwind.config.js` needs to change, since screens should reference these tokens (e.g. `bg-background`, `text-primary`) rather than hardcoded colors.
+These exact values are a provisional baseline so the app renders correctly from NativeWind setup onward — not a final design decision. Revisit if real brand/design input changes them; if it does, only `tailwind.config.js` needs to change, since screens should reference these tokens (e.g. `bg-background`, `text-primary`) rather than hardcoded colors.
+
+## Testing
+
+Framework: `jest`, with the `jest-expo` preset (the officially documented Expo unit-testing setup — `jest.config.js`, `npm test` / `npm run test:watch`). Not specified in this doc before [implementation-roadmap.md](../process/implementation-roadmap.md)'s "Tests" step was reached; resolved then, rather than left implicit, since a test runner is itself a stack decision.
+
+Scope, per [Architecture](architecture.md)'s "Domain layer: pure functions first": unit tests target the domain/lib pure functions that carry real risk — the scheduling cycle engine (`src/domain/schedule/cycle.test.ts`) and the shared timer/date math (`src/lib/date.test.ts`). These need no React Native environment, database, or emulator to test, which is the whole point of keeping that logic pure. Not a mandate to snapshot-test every component — UI correctness for this app is still verified live on-device (see each feature's implementation notes), not through component tests.

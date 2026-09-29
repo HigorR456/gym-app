@@ -19,9 +19,8 @@ Build incrementally:
 15. Session persistence/recovery (AppState, boot-time check, resume/discard an in-progress session)
 16. History/session saving
 17. Settings/About
-18. UX refinement
-19. Tests
-20. Full offline verification
+18. Tests
+19. Full offline verification
 
 The deletion/edit warnings from [Workout](../features/workout.md) and [Program](../features/program.md) depend on the scheduling engine (step 10) existing — that's why those steps happen in two passes (basic CRUD first, warnings after step 10).
 
