@@ -6,7 +6,7 @@ import { Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-nativ
 
 import { ExerciseImage } from '@/components/ExerciseImage';
 import { IconPickerField } from '@/components/IconPickerField';
-import { SetRow } from '@/components/SetRow';
+import { SetRow, SetRowHeader } from '@/components/SetRow';
 import { ExerciseCatalog } from '@/features/exercises/components/ExerciseCatalog';
 import type { SupportedLanguage } from '@/i18n';
 import { pickLocalized } from '@/i18n/localizedText';
@@ -102,6 +102,7 @@ export function WorkoutEditor({ workoutId }: Props) {
                   </Pressable>
                 </View>
 
+                {workoutExercise.sets.length > 0 ? <SetRowHeader /> : null}
                 {workoutExercise.sets.map((set, setIndex) => (
                   <SetRow
                     key={set.id}

@@ -29,6 +29,8 @@ Each exercise must allow configuring:
 - duration/time
 - rest between sets
 
+The set list shows a column header (weight/reps/duration/rest) above it, not just a per-field placeholder — a `TextInput` placeholder disappears once a value is filled in, so without a persistent header the columns stop being identifiable once a set actually has numbers in it (`SetRowHeader`, shared with the execution screen — see [Workout Execution](workout-execution.md), "Sets").
+
 Example:
 
 ### Bench Press

@@ -89,7 +89,7 @@ When the exercise has both a start-position and a peak-position image (most do �
 
 ## Sets
 
-Right below the exercise info, show the list of sets. Each set must allow:
+Right below the exercise info, show the list of sets, with a column header (weight/reps/duration/rest) above it — a `TextInput`'s placeholder alone isn't enough, since it disappears once a value is filled in and the column would no longer be identifiable (`SetRowHeader`, shared with the Workout editor — see [Workout](workout.md)). Each set must allow:
 
 - editing weight
 - editing reps

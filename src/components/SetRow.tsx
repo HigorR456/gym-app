@@ -1,4 +1,5 @@
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
+import { useTranslation } from 'react-i18next';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
 import { theme } from '@/lib/theme';
@@ -52,6 +53,28 @@ function NumericField({
       keyboardType="numeric"
       className="flex-1 rounded-md bg-surface-100 px-2 py-1.5 text-text text-center"
     />
+  );
+}
+
+// Column labels above a SetRow list, so weight/reps/duration/rest stay
+// identifiable once a value is filled in — a TextInput's placeholder alone
+// (SetRow's NumericFields below) disappears the moment there's a value
+// (spec/features/workout.md and spec/features/workout-execution.md). Column
+// widths/gaps mirror SetRow exactly so the two line up; `showCompletionColumn`
+// reserves the extra trailing icon width SetRow only has in session execution
+// (the completed-toggle, via `onToggleComplete`).
+export function SetRowHeader({ showCompletionColumn }: { showCompletionColumn?: boolean }) {
+  const { t } = useTranslation();
+  return (
+    <View className="flex-row items-center gap-2">
+      <View className="w-6" />
+      <Text className="flex-1 text-textMuted text-xs text-center">{t('workouts.setHeaderWeight')}</Text>
+      <Text className="flex-1 text-textMuted text-xs text-center">{t('workouts.setHeaderReps')}</Text>
+      <Text className="flex-1 text-textMuted text-xs text-center">{t('workouts.setHeaderDuration')}</Text>
+      <Text className="flex-1 text-textMuted text-xs text-center">{t('workouts.setHeaderRest')}</Text>
+      {showCompletionColumn ? <View style={{ width: 18 }} /> : null}
+      <View style={{ width: 16 }} />
+    </View>
   );
 }
 

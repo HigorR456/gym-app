@@ -9,7 +9,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { ExercisePoseImages } from '@/components/ExercisePoseImages';
 import { RestTimer } from '@/components/RestTimer';
 import { Screen } from '@/components/Screen';
-import { SetRow } from '@/components/SetRow';
+import { SetRow, SetRowHeader } from '@/components/SetRow';
 import { Timer } from '@/components/Timer';
 import { ExerciseCatalog } from '@/features/exercises/components/ExerciseCatalog';
 import type { SupportedLanguage } from '@/i18n';
@@ -126,6 +126,7 @@ export function SessionScreen({ sessionId }: Props) {
           ) : null}
 
           <View className="mt-6">
+            {currentExercise.sets.length > 0 ? <SetRowHeader showCompletionColumn /> : null}
             {currentExercise.sets.map((set, index) => (
               <SetRow
                 key={set.id}
