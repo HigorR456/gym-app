@@ -18,7 +18,7 @@ Two engine-adjacent pieces exist only in the repository/domain layer, not as the
 
 Not built in this step: editing the schedule's start day/date after creation (see "Editing the schedule's start" below) — creation-only for now, since that edit is only ever valid in a narrow same-day window before any checkout.
 
-The **Schedule** screen presents a calendar.
+The **Schedule** screen presents a calendar. The calendar is always visible, even with no active schedule — it still shows actual training activity (see "Calendar heatmap" below, which is independent of the plan), and "Choose a Program" is offered alongside it rather than replacing it.
 
 The user must be able to:
 
@@ -111,12 +111,12 @@ The calendar must highlight actual training activity, not just the schedule's pl
 
 - **Light yellow** — more than 1 workout session completed that day.
 - **Yellow** — exactly 1 workout session completed that day.
-- **Dark yellow** — a rest day with no workout session (as planned).
-- **Black** — no action: no session happened and the day isn't a rest day. This covers unscheduled days, a scheduled workout day that's still pending/overdue, and a **skipped** day — all render the same as a day with no activity, with no distinct color or outline for missed vs. skipped vs. never-scheduled.
+- **Dark yellow** — a rest day, with no workout session, that's already happened or is happening today (its date is `<=` today).
+- **Black** — no action: no session happened and the day isn't a past/current rest day. This covers unscheduled days, a scheduled workout day that's still pending/overdue, a **skipped** day, and a **planned (future) rest day** — all render the same base fill, distinguished only by the outline below.
 
-The fill color is driven by what actually happened that day, not by what was scheduled: a day with one or more completed sessions is always yellow/light yellow, even if the schedule had it marked as rest (see [Start](start.md), "Multiple sessions on the same day" and "Starting a workout while a schedule is active"). Dark yellow only applies when nothing was done and the day was planned as rest.
+The fill color is driven by what actually happened that day, not by what was scheduled: a day with one or more completed sessions is always yellow/light yellow, even if the schedule had it marked as rest (see [Start](start.md), "Multiple sessions on the same day" and "Starting a workout while a schedule is active"). Dark yellow only applies when nothing was done and the day was (or is) planned as rest, and its date has arrived.
 
-Days that are part of the active schedule's future coverage (haven't arrived yet) get a **yellow outline** on top of their (black) fill, to visually distinguish "scheduled" from truly unscheduled empty days.
+Days that are part of the active schedule's future coverage (haven't arrived yet) get a **yellow outline** on top of their (black) fill, to visually distinguish "scheduled" from truly unscheduled empty days — this applies uniformly to future workout days and future rest days alike; a rest day only gets the solid dark-yellow treatment once its own date is `<=` today, not while it's still a future projection.
 
 ## No pause mechanism
 

@@ -70,26 +70,23 @@ export function ScheduleScreen() {
       <ScrollView contentContainerClassName="px-4 pt-4 pb-8">
         <Text className="text-text text-xl font-semibold mb-4">{t('tabs.schedule')}</Text>
 
-        {!schedule ? (
-          <>
-            <Text className="text-textMuted mb-4">{t('schedule.empty')}</Text>
-            <Pressable onPress={() => setFormOpen(true)} className="rounded-lg bg-primary py-3 items-center">
-              <Text className="text-background font-semibold">{t('schedule.chooseProgram')}</Text>
-            </Pressable>
-          </>
+        {schedule ? (
+          <View className="flex-row items-center gap-3 mb-4">
+            <IconSwatch iconId={schedule.programIcon} variant="program" size={40} />
+            <Text className="text-text text-lg font-semibold flex-1">{schedule.programName}</Text>
+          </View>
         ) : (
+          <Text className="text-textMuted mb-4">{t('schedule.empty')}</Text>
+        )}
+
+        {schedule ? <CurrentDayCard schedule={schedule} onSkip={handleSkip} /> : null}
+
+        <View className="mt-6">
+          <ScheduleCalendar schedule={schedule} />
+        </View>
+
+        {schedule ? (
           <>
-            <View className="flex-row items-center gap-3 mb-4">
-              <IconSwatch iconId={schedule.programIcon} variant="program" size={40} />
-              <Text className="text-text text-lg font-semibold flex-1">{schedule.programName}</Text>
-            </View>
-
-            <CurrentDayCard schedule={schedule} onSkip={handleSkip} />
-
-            <View className="mt-6">
-              <ScheduleCalendar schedule={schedule} />
-            </View>
-
             <View className="flex-row gap-6 mt-6">
               <Pressable onPress={openEndDateEditor}>
                 <Text className="text-primary text-sm">{t('schedule.changeEndDate')}</Text>
@@ -127,6 +124,10 @@ export function ScheduleScreen() {
               </View>
             ) : null}
           </>
+        ) : (
+          <Pressable onPress={() => setFormOpen(true)} className="rounded-lg bg-primary py-3 items-center mt-6">
+            <Text className="text-background font-semibold">{t('schedule.chooseProgram')}</Text>
+          </Pressable>
         )}
       </ScrollView>
 

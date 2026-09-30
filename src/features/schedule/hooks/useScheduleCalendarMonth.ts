@@ -69,7 +69,13 @@ export function useScheduleCalendarMonth(schedule: ActiveSchedule | null, year: 
           fill = 'lightYellow';
         } else if (sessionCount === 1) {
           fill = 'yellow';
-        } else if (dayInfo?.type === 'rest') {
+        } else if (dayInfo?.type === 'rest' && date <= today) {
+          // A *planned* (future) rest day falls through to the black-fill
+          // branch below instead, so it gets the same outline treatment as
+          // any other future-coverage day (see the `outline` check) rather
+          // than the solid fill reserved for a rest day that's already
+          // happened or is happening today (spec/features/schedule.md,
+          // "Calendar heatmap").
           fill = 'darkYellow';
         }
 
