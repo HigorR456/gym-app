@@ -24,4 +24,8 @@ export type Exercise = {
   difficulty: string | null;
   isBodyweight: boolean;
   images: ExerciseImages;
+  // Raw dataset muscle slugs (e.g. "rectus_abdominis") — not localized, same
+  // as bodyPart/equipment (see ExerciseDetail's Tag/MuscleLine formatting).
+  primaryMuscles: string[];
+  secondaryMuscles: string[];
 };

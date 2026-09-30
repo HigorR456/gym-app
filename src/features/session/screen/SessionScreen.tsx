@@ -6,7 +6,7 @@ import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
-import { ExerciseImage } from '@/components/ExerciseImage';
+import { ExercisePoseImages } from '@/components/ExercisePoseImages';
 import { RestTimer } from '@/components/RestTimer';
 import { Screen } from '@/components/Screen';
 import { SetRow } from '@/components/SetRow';
@@ -29,6 +29,17 @@ function Tag({ label }: { label: string }) {
     <View className="rounded-full bg-surface-100 px-3 py-1">
       <Text className="text-textMuted text-xs capitalize">{label.replace(/_/g, ' ')}</Text>
     </View>
+  );
+}
+
+// Mirrors ExerciseDetail's MuscleLine — spec/features/workout-execution.md,
+// "Exercise information".
+function MuscleLine({ label, muscles }: { label: string; muscles: string[] }) {
+  return (
+    <Text className="text-textMuted text-sm mt-2">
+      <Text className="text-text">{label}: </Text>
+      {muscles.map((muscle) => muscle.replace(/_/g, ' ')).join(', ')}
+    </Text>
   );
 }
 
@@ -99,9 +110,7 @@ export function SessionScreen({ sessionId }: Props) {
 
       {currentExercise ? (
         <ScrollView className="flex-1" contentContainerClassName="px-4 pb-4">
-          <View className="items-center">
-            <ExerciseImage images={currentExercise.exercise.images} size={180} />
-          </View>
+          <ExercisePoseImages images={currentExercise.exercise.images} />
           <Text className="text-text text-xl font-semibold mt-4">
             {pickLocalized(currentExercise.exercise.name, language)}
           </Text>
@@ -109,6 +118,12 @@ export function SessionScreen({ sessionId }: Props) {
             {currentExercise.exercise.bodyPart ? <Tag label={currentExercise.exercise.bodyPart} /> : null}
             {currentExercise.exercise.equipment ? <Tag label={currentExercise.exercise.equipment} /> : null}
           </View>
+          {currentExercise.exercise.primaryMuscles.length > 0 ? (
+            <MuscleLine label={t('exercises.primaryMuscles')} muscles={currentExercise.exercise.primaryMuscles} />
+          ) : null}
+          {currentExercise.exercise.secondaryMuscles.length > 0 ? (
+            <MuscleLine label={t('exercises.secondaryMuscles')} muscles={currentExercise.exercise.secondaryMuscles} />
+          ) : null}
 
           <View className="mt-6">
             {currentExercise.sets.map((set, index) => (

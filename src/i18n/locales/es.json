@@ -12,7 +12,9 @@
     "addToWorkout": "Añadir al entrenamiento",
     "addedToast": "Ejercicio añadido",
     "removedToast": "Ejercicio eliminado",
-    "done": "Listo"
+    "done": "Listo",
+    "primaryMuscles": "Primarios",
+    "secondaryMuscles": "Secundarios"
   },
   "common": {
     "cancel": "Cancelar",

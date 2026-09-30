@@ -78,11 +78,14 @@ And allow:
 Show:
 
 - exercise name
-- WebP image
+- WebP image(s)
 - additional info available in the dataset
 - muscle group/equipment, when available
+- primary and secondary muscles, each on its own line, primary first — same formatting and source as the exercise catalog preview (see [Workout](workout.md), "Exercise catalog (picker)")
 
 The image must work offline. If a specific exercise's image is missing or fails to load, show a generic placeholder icon instead, without breaking the screen.
+
+When the exercise has both a start-position and a peak-position image (most do — see [Dataset & Licensing](../technical/dataset-and-licensing.md)), show both side by side, large, filling the screen's width, rather than only a small start-position image — so the movement's range is visible at a glance (`ExercisePoseImages`, shared with the exercise detail preview — see [Workout](workout.md), "Exercise catalog (picker)"). An exercise with only a single (`main`) image falls back to that one image, smaller and centered.
 
 ## Sets
 

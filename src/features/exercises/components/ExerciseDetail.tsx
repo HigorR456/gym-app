@@ -2,7 +2,7 @@ import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 
-import { ExerciseImage } from '@/components/ExerciseImage';
+import { ExercisePoseImages } from '@/components/ExercisePoseImages';
 import { Screen } from '@/components/Screen';
 import type { Exercise } from '@/features/exercises/types';
 import type { SupportedLanguage } from '@/i18n';
@@ -40,9 +40,7 @@ export function ExerciseDetail({ exercise, language, onClose, onSelect }: Props)
         {exercise ? (
           <>
             <ScrollView contentContainerClassName="px-4 pb-8">
-              <View className="items-center">
-                <ExerciseImage images={exercise.images} size={200} />
-              </View>
+              <ExercisePoseImages images={exercise.images} />
               <Text className="text-text text-xl font-semibold mt-4">
                 {pickLocalized(exercise.name, language)}
               </Text>
@@ -55,6 +53,12 @@ export function ExerciseDetail({ exercise, language, onClose, onSelect }: Props)
                 <Text className="text-text mt-4 leading-6">
                   {pickLocalized(exercise.description, language)}
                 </Text>
+              ) : null}
+              {exercise.primaryMuscles.length > 0 ? (
+                <MuscleLine label={t('exercises.primaryMuscles')} muscles={exercise.primaryMuscles} />
+              ) : null}
+              {exercise.secondaryMuscles.length > 0 ? (
+                <MuscleLine label={t('exercises.secondaryMuscles')} muscles={exercise.secondaryMuscles} />
               ) : null}
             </ScrollView>
             {onSelect ? (
@@ -76,5 +80,16 @@ function Tag({ label }: { label: string }) {
     <View className="rounded-full bg-surface-100 px-3 py-1">
       <Text className="text-textMuted text-xs capitalize">{label.replace(/_/g, ' ')}</Text>
     </View>
+  );
+}
+
+// Primary/secondary muscles each render as their own single line (not one
+// Tag per muscle) — spec/features/workout.md, "Exercise catalog (picker)".
+function MuscleLine({ label, muscles }: { label: string; muscles: string[] }) {
+  return (
+    <Text className="text-textMuted text-sm mt-2">
+      <Text className="text-text">{label}: </Text>
+      {muscles.map((muscle) => muscle.replace(/_/g, ' ')).join(', ')}
+    </Text>
   );
 }

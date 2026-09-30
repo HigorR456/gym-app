@@ -59,6 +59,10 @@ The user must be able to edit this information both before and during execution.
 
 The "add exercises" action opens a local exercise catalog, with a searchable list and filters by muscle group/equipment. Each item shows the name (in the selected language) and a thumbnail image; tapping an exercise opens a preview with more detail before confirming the addition to the Workout.
 
+The preview's detail includes the exercise's primary and secondary muscles (from the RepDB dataset — see [Dataset & Licensing](../technical/dataset-and-licensing.md)), each on its own line, primary first. Muscle names are raw dataset slugs (e.g. `rectus_abdominis`), formatted the same way as the body-part/equipment/difficulty tags above them (underscores to spaces, capitalized) — not translated, same as those.
+
+The preview also shows the exercise's start and peak position images side by side, large, filling the screen's width, not just a small start-position image, when the dataset has both (`ExercisePoseImages` — see [Workout Execution](workout-execution.md), "Exercise information", which shows the same side-by-side pair during execution). An exercise with only a single (`main`) image falls back to that one image, smaller and centered, same as before.
+
 ### Implementation notes
 
 The catalog itself (`ExerciseCatalog`, `ExerciseCard`, `ExerciseImage`, `EmptyState` — see [Architecture](../technical/architecture.md)) was built in [implementation step 7](../process/implementation-roadmap.md), ahead of Workout CRUD, so it's a self-contained, reusable browse/search/preview component. It's temporarily surfaced as the whole Workout tab so it's reachable and testable before Workout CRUD (step 8) exists. Step 8 replaces the tab's content with the real Workout list and reuses this same component as the "add exercises" picker, adding the "confirm add to Workout" action the preview doesn't have yet.

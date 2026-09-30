@@ -15,7 +15,22 @@ export type ExerciseRow = {
   difficulty: string | null;
   is_bodyweight: number;
   images: string | null;
+  metadata: string | null;
 };
+
+// primary_muscles/secondary_muscles aren't real columns (see
+// spec/technical/database-schema.md's "Promote a metadata/images field to a
+// real column only once a feature needs to query on it" — muscles are only
+// ever displayed, never filtered/queried on) — read out of the raw dataset
+// blob stored in `metadata` instead.
+function musclesFromMetadata(metadata: string | null, key: 'primary_muscles' | 'secondary_muscles'): string[] {
+  if (!metadata) {
+    return [];
+  }
+  const parsed = JSON.parse(metadata) as Record<string, unknown>;
+  const value = parsed[key];
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+}
 
 export function toExercise(row: ExerciseRow): Exercise {
   return {
@@ -31,6 +46,8 @@ export function toExercise(row: ExerciseRow): Exercise {
     difficulty: row.difficulty,
     isBodyweight: row.is_bodyweight === 1,
     images: (row.images ? JSON.parse(row.images) : {}) as ExerciseImages,
+    primaryMuscles: musclesFromMetadata(row.metadata, 'primary_muscles'),
+    secondaryMuscles: musclesFromMetadata(row.metadata, 'secondary_muscles'),
   };
 }
 

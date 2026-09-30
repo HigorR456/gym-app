@@ -10,18 +10,25 @@ type Props = {
   images: ExerciseImages;
   size?: number;
   style?: StyleProp<ImageStyle>;
+  // Requests a specific pose (used by ExercisePoseImages to show start/peak
+  // side by side). Omitted elsewhere, where a single representative image
+  // is enough — falls back to `main` if that exact pose isn't available.
+  pose?: 'start' | 'peak';
 };
 
-function pickImageKey(images: ExerciseImages): string | undefined {
+function pickImageKey(images: ExerciseImages, pose?: 'start' | 'peak'): string | undefined {
+  if (pose) {
+    return images[pose] ?? images.main;
+  }
   return images.start ?? images.main ?? images.peak;
 }
 
 // Falls back to a generic placeholder both when there's no image key at all
 // and when the resolved image fails to load — see
 // spec/features/workout-execution.md, "Exercise information".
-export function ExerciseImage({ images, size = 56, style }: Props) {
+export function ExerciseImage({ images, size = 56, style, pose }: Props) {
   const [failed, setFailed] = useState(false);
-  const key = pickImageKey(images);
+  const key = pickImageKey(images, pose);
   const source = key ? exerciseImages[key] : undefined;
 
   if (!source || failed) {
