@@ -75,6 +75,26 @@ Creating/editing a Workout, in addition to its name, includes a picker for an ic
 
 The icon renders inside a rounded-square swatch: primary/yellow background, black icon (`IconSwatch`, `variant="workout"`). It's shown to the left of the Workout's title in the Workout list, and next to any Program day that references that Workout (see [Program](program.md), "Icon selection") — never on a rest day, so the two states stay visually distinct at a glance. In both the Workout and Program editors, only the currently selected icon is shown (`IconPickerField`); tapping it opens the full catalog in a modal (`IconPicker`) instead of the grid always being visible inline.
 
+## Default workouts
+
+Not in the original scope. The app ships with 5 Workouts already defined on first run, so there's something to explore/start before the user creates anything of their own:
+
+| Workout | Icon | Exercises |
+|---|---|---|
+| Push day | `dumbbell` | Barbell Bench Press, Incline Dumbbell Press, Barbell Overhead Press, Dumbbell Lateral Raise, V-Bar Tricep Pushdown |
+| Pull day | `arm-flex` | Pull-Up, Bent-Over Barbell Row, Seated Cable Row, Dumbbell Hammer Curl, Rear Delt Fly |
+| Leg day | `seat-legroom-reduced` | Barbell Back Squat, Machine Hip Abduction, Leg Extension, Seated Leg Curl, Hip Adduction, Bodyweight Calf Raise |
+| Full-body A | `weight-lifter` | Goblet Squat, Barbell Bench Press, Bent-Over Barbell Row, Dumbbell Romanian Deadlift, Plank |
+| Full-body B | `body` | Romanian Deadlift, Barbell Overhead Press, Lat Pulldown, Dumbbell Lunge, Bicycle Crunch |
+
+Every exercise in every default Workout uses the same set scheme: 3 sets, 10 reps, 90 seconds rest, no weight preset (the user fills that in). Icon ids are from `src/lib/icons.ts`'s `ICON_OPTIONS`, see "Icon selection" above.
+
+### Implementation notes
+
+`src/data/sqlite/seed/seedDefaultWorkouts.ts` inserts these 5 Workouts through the same `createWorkout` repository function the UI uses (not raw SQL) — they're ordinary Workouts, fully editable/deletable/duplicable afterward, not a protected or app-managed category. Seeding is guarded by an `app_settings` marker (`default_workouts_seeded`), not an `INSERT OR IGNORE` keyed by a fixed id like the exercise catalog (see [Database Schema](../technical/database-schema.md)) — `createWorkout` generates a fresh UUID per call, so there's no stable id to dedupe against, and the marker also means a user who deletes or renames a default Workout keeps that change; it never comes back on a later launch. Runs in `bootstrapDatabase.ts` after exercise catalog seeding (`workout_exercises.exercise_id` must find the referenced exercise already in the catalog) and before the app renders.
+
+Exercise ids were matched against the real RepDB dataset (`assets/exercise-dataset/exercises.json`), not guessed from names — e.g. "Bent-Over Barbell Row" is `barbell-row`, "Barbell Back Squat" is `squat`.
+
 ## Deleting a Workout referenced by Programs
 
 When deleting a Workout, show a confirmation popup listing which Programs use that Workout in any of their days, if any.
