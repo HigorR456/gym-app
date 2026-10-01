@@ -1,5 +1,5 @@
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, type ImageStyle, type StyleProp, View } from 'react-native';
 
 import { exerciseImages } from '@/data/sqlite/seed/exerciseImages.generated';
@@ -30,6 +30,15 @@ export function ExerciseImage({ images, size = 56, style, pose }: Props) {
   const [failed, setFailed] = useState(false);
   const key = pickImageKey(images, pose);
   const source = key ? exerciseImages[key] : undefined;
+
+  // Swapping exercises reuses this component instance (same position in the
+  // tree, no key) rather than remounting it, so `failed` from a previous
+  // exercise's broken image would otherwise stick around and permanently
+  // blank out every exercise after it. Reset whenever the resolved image
+  // changes.
+  useEffect(() => {
+    setFailed(false);
+  }, [source]);
 
   if (!source || failed) {
     return (

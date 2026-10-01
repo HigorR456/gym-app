@@ -275,7 +275,7 @@ Build reusable components for recurring elements, including:
 - `Timer` — the session-wide elapsed-time readout (step 14, see [Workout Execution](../features/workout-execution.md))
 - `RestTimer` — the per-set rest countdown popup (step 14, see [Workout Execution](../features/workout-execution.md)). Both `Timer` and `RestTimer` are purely presentational, ticking via the shared `lib/useNowTick.ts` hook; the rest timer's own start/+10/-10/dismiss state lives in `features/session/hooks/useRestTimer.ts`
 - `ConfirmationModal`
-- `ExerciseImage` — a single exercise image (with placeholder fallback); `ExercisePoseImages` wraps it to show the start/peak pair side by side on the exercise detail preview and the execution screen, when the dataset has both
+- `ExerciseImage` — a single exercise image (with placeholder fallback); `ExercisePoseImages` wraps it to show the start/peak pair side by side on the exercise detail preview and the execution screen, when the dataset has both. `ExerciseImage` resets its own failed-to-load state whenever the resolved image changes (not just on mount) — the execution screen reuses the same component instance across exercises rather than remounting it, so without that reset a single failed load would silently blank out every exercise's image for the rest of the session
 - `EmptyState`
 - `ScheduleProgramForm` — shared between the Schedule and Start features/screens (see [Schedule](../features/schedule.md) and [Start](../features/start.md))
 - `CurrentDayCard` — the active schedule's current day, shown prominently on both the Schedule and Start screens (see [Schedule](../features/schedule.md) and [Start](../features/start.md))
