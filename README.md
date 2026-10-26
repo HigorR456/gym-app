@@ -46,19 +46,48 @@ Suggested reading order for a newcomer: product overview, then stack and archite
 
 ### Workout
 
-![Workout list](docs/screenshots/workout-list.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/workout-list.png" alt="Workout list" width="220">
+
+</td>
+<td valign="top">
 
 The **Workout** tab lists every Workout you have created: name, a preview of its exercises, the exercise count and a custom icon. From each row you can **duplicate** or **delete** a Workout, and the **+** button creates a new one. Deleting or editing a Workout that is part of an active schedule shows a warning first.
 
+</td>
+</tr>
+</table>
+
 ### Exercise catalog
 
-![Exercise catalog](docs/screenshots/exercise-catalog.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/exercise-catalog.png" alt="Exercise catalog" width="220">
+
+</td>
+<td valign="top">
 
 When adding exercises to a Workout you pick from a bundled catalog of 600+ exercises, each with start/peak images. You can search by name and filter by **body part** (top row) and **equipment** (second row). The **i** button opens the exercise details (muscles, instructions), and **Done** returns to the Workout editor. The catalog ships inside the app, so it works fully offline.
 
+</td>
+</tr>
+</table>
+
 ### Program
 
-![Program editor](docs/screenshots/program-editor.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/program-editor.png" alt="Program editor" width="220">
+
+</td>
+<td valign="top">
 
 A **Program** is an ordered cycle of days. Each day is either a Workout day or a **Rest** day. In the editor you can:
 
@@ -69,13 +98,24 @@ A **Program** is an ordered cycle of days. Each day is either a Workout day or a
 
 The example shown is a 5-day cycle: Push, Pull, Rest, Legs, Rest. Programs can also be duplicated.
 
+</td>
+</tr>
+</table>
+
 ### Start
 
 The **Start** tab is the entry point to a workout. If a schedule is active, today's day is shown first: the pending Workout (with a "Start workout" action), or a Rest indicator. If no Program is selected it offers **Choose Program**, which opens the same schedule form used on the Schedule screen. Below that, every Workout can be started directly, with or without a Program. Starting something other than what the schedule planned shows a warning, because it cancels the current schedule.
 
 ### Workout execution
 
-![Workout execution](docs/screenshots/workout-execution.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/workout-execution.png" alt="Workout execution" width="220">
+
+</td>
+<td valign="top">
 
 The live workout screen shows one exercise at a time ("Exercise 1/6"):
 
@@ -88,9 +128,20 @@ The live workout screen shows one exercise at a time ("Exercise 1/6"):
 
 Timers are timestamp-based, so they stay correct when the app is backgrounded. Every change is written to SQLite immediately, so an interrupted session can be **resumed or discarded** the next time the app opens. Finished sessions are saved to history, including configured and actual rest.
 
+</td>
+</tr>
+</table>
+
 ### Schedule
 
-![Schedule](docs/screenshots/schedule.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/schedule.png" alt="Schedule" width="220">
+
+</td>
+<td valign="top">
 
 The **Schedule** tab applies a Program to a calendar. You choose the Program, which cycle day to start on, the start date, and an end date (or no end for a continuous program). The screen shows:
 
@@ -100,11 +151,26 @@ The **Schedule** tab applies a Program to a calendar. You choose the Program, wh
 
 If you miss a workout day, the cycle **slides automatically**: the pending day stays pending until you complete it, rather than silently moving on. Only one schedule can be active at a time. This is the most complex part of the app, and its logic lives in pure, unit-tested functions in `src/domain/schedule/`. See [`spec/features/schedule.md`](spec/features/schedule.md).
 
+</td>
+</tr>
+</table>
+
 ### Settings
 
-![Settings](docs/screenshots/settings.png)
+<table>
+<tr>
+<td width="240" valign="top">
+
+<img src="docs/screenshots/settings.png" alt="Settings" width="220">
+
+</td>
+<td valign="top">
 
 Choose the language (**English**, **Español**, **Deutsch**) and read the **About** section, which includes the required attribution to [RepDB](https://repdb.co) for the exercise dataset.
+
+</td>
+</tr>
+</table>
 
 ## Tech stack
 
